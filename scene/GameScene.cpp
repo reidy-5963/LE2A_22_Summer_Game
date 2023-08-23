@@ -71,6 +71,24 @@ void GameScene::Initialize() {
 	player_->SetBulletModel(p_bullet_models);
 
 #pragma endregion
+
+#pragma region 
+	enemy_ = std::make_unique<Enemy>();
+	// プレイヤーのモデルの生成
+	e_body_model_.reset(Model::CreateFromOBJ("EnemyTest_Body", true));
+	e_l_wepon_model_.reset(Model::CreateFromOBJ("EnemyTest_F_Wepon", true));
+	e_r_wepon_model_.reset(Model::CreateFromOBJ("EnemyTest_I_Wepon", true));
+	// プレイヤーのモデルを配列に
+	std::vector<Model*> enemyModels = {
+	    e_body_model_.get(), 
+		e_l_wepon_model_.get(),
+		e_r_wepon_model_.get(),
+	};
+	// プレイヤーの初期化処理
+	enemy_->Initialize(enemyModels);
+#pragma endregion
+
+
 }
 
 void GameScene::Update() { 
@@ -81,10 +99,18 @@ void GameScene::Update() {
 		ImGui::Text("press esc -> pose");
 		ImGui::End();
 
-
-		if (input_->TriggerKey(DIK_ESCAPE)) {
-			isPoseMode_ = true;
+		XINPUT_STATE joystate;
+		if (input_->GetJoystickState(0, joystate)) {
+			if (joystate.Gamepad.wButtons == XINPUT_GAMEPAD_START) {
+				isPoseMode_ = true;
+			}
 		}
+		else {
+			if (input_->TriggerKey(DIK_ESCAPE)) {
+				isPoseMode_ = true;
+			}
+		}
+
 
 #pragma region 追従カメラ
 		// 追従カメラの更新処理
@@ -104,6 +130,8 @@ void GameScene::Update() {
 		// プレイヤーの更新処理
 		player_->Update();
 
+		//
+		enemy_->Update();
 
 		// ビュープロジェクションを転送する
 		viewProjection_.TransferMatrix();
@@ -114,9 +142,17 @@ void GameScene::Update() {
 		ImGui::Text("press 1 -> Title");
 		ImGui::End();
 
-		if (input_->TriggerKey(DIK_ESCAPE)) {
-			isPoseMode_ = false;
+		XINPUT_STATE joystate;
+		if (input_->GetJoystickState(0, joystate)) {
+			if (joystate.Gamepad.wButtons == XINPUT_GAMEPAD_START) {
+				isPoseMode_ = false;
+			}
+		} else {
+			if (input_->TriggerKey(DIK_ESCAPE)) {
+				isPoseMode_ = false;
+			}
 		}
+
 		if (input_->TriggerKey(DIK_1)) {
 			scenedNo_ = TITLE_S;
 		}
@@ -157,6 +193,9 @@ void GameScene::Draw() {
 	ground_->Draw(viewProjection_);
 	// プレイヤーの描画処理
 	player_->Draw(viewProjection_);
+	//
+	enemy_->Draw(viewProjection_);
+
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

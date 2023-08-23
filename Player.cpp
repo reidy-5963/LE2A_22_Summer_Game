@@ -36,11 +36,15 @@ void Player::Update() {
 	
 
 	// 各部位のワールド変換データ更新処理
-	worldTransform_body_.UpdateMatrix();
-	worldTransform_head_.UpdateMatrix();
-	worldTransform_l_arm_.UpdateMatrix();
-	worldTransform_r_arm_.UpdateMatrix();
-	worldTransform_wepon_.UpdateMatrix();
+	//worldTransform_body_.UpdateMatrix();
+	//worldTransform_head_.UpdateMatrix();
+	//worldTransform_l_arm_.UpdateMatrix();
+	//worldTransform_r_arm_.UpdateMatrix();
+	//worldTransform_wepon_.UpdateMatrix();
+
+	for (int i = 0; i < 5; i++) {
+		worldTransform_parts_[i].UpdateMatrix();
+	}
 
 	///
 	BulletIsDead();
@@ -80,35 +84,55 @@ void Player::RootUpdate() {
 	direction.z = directMat.m[3][2];
 	// キャラの向きを変更
 	//worldTransform_.rotation_.y = std::atan2(direction.x, direction.z);
-	worldTransform_head_.rotation_.y = std::atan2(direction.x, direction.z);
+	worldTransform_parts_[Head].rotation_.y = std::atan2(direction.x, direction.z);
 
 
-	if (!isJump_) {
-		if (input_->TriggerKey(DIK_SPACE)) {
-			isJump_ = true;
-		}
-		worldTransform_.translation_.y--;
-	}
-	else if (isJump_) {
-		if (worldTransform_.translation_.y < 10.0f) {
-			worldTransform_.translation_.y += 1.0f;
-		} else if (worldTransform_.translation_.y >= 10.0f) {
-			isJump_ = false;
-		}
-	}
-	if (worldTransform_.translation_.y < 0) {
-		worldTransform_.translation_.y = 0;
-	}
 
 
 
 	// コントローラーの場合
 	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
+		if (!isJump_) {
+			worldTransform_.translation_.y--;
+
+			if (joyState.Gamepad.wButtons == XINPUT_GAMEPAD_A) {
+				isJump_ = true;
+			}
+		} else if (isJump_) {
+			if (worldTransform_.translation_.y < 10.0f) {
+				worldTransform_.translation_.y += 1.0f;
+			} else if (worldTransform_.translation_.y >= 10.0f) {
+				isJump_ = false;
+			}
+		}
+		if (worldTransform_.translation_.y < 0) {
+			worldTransform_.translation_.y = 0;
+		}
+
+
 		// 左スティックから移動量を設定
 		move = {(float)joyState.Gamepad.sThumbLX, 0.0f, (float)joyState.Gamepad.sThumbLY};
 	}
 	// キーマウ
 	else {
+		if (!isJump_) {
+			worldTransform_.translation_.y--;
+
+			if (input_->TriggerKey(DIK_SPACE)) {
+				isJump_ = true;
+			}
+		} else if (isJump_) {
+			if (worldTransform_.translation_.y < 10.0f) {
+				worldTransform_.translation_.y += 1.0f;
+			} else if (worldTransform_.translation_.y >= 10.0f) {
+				isJump_ = false;
+			}
+		}
+		if (worldTransform_.translation_.y < 0) {
+			worldTransform_.translation_.y = 0;
+		}
+
+
 		// wasdで移動量を設定
 		if (input_->PushKey(DIK_W)) {
 			move.z = 1.0f;
@@ -139,13 +163,13 @@ void Player::RootUpdate() {
 	moveMat = MyMath::Multiply(moveMat, rotateMat);
 	// 行列の平行移動成分のみ取り出す
 	move.x = moveMat.m[3][0];
-	move.y = moveMat.m[3][1];
+	move.y = 0.0f;
 	move.z = moveMat.m[3][2];
 
 	if (input_->PushKey(DIK_W) || input_->PushKey(DIK_A) || input_->PushKey(DIK_S) ||
 	    input_->PushKey(DIK_D)) {
 		// キャラの向きを変更
-		worldTransform_body_.rotation_.y = std::atan2(move.x, move.z);
+		worldTransform_parts_[Body].rotation_.y = std::atan2(move.x, move.z);
 
 	}
 
@@ -163,10 +187,10 @@ void Player::Draw(const ViewProjection& viewProjection) {
 	// ベース部分の描画処理
 	//BaseCharacter::Draw(viewProjection);
 	// モデルの描画
-	models_[Body]->Draw(worldTransform_body_, viewProjection);
-//	models_[Head]->Draw(worldTransform_head_, viewProjection);
-	models_[L_Arm]->Draw(worldTransform_l_arm_, viewProjection);
-	models_[R_Arm]->Draw(worldTransform_r_arm_, viewProjection);
+	models_[Body]->Draw(worldTransform_parts_[Body], viewProjection);
+	//	models_[Head]->Draw(worldTransform_head_, viewProjection);
+	models_[L_Arm]->Draw(worldTransform_parts_[L_Arm], viewProjection);
+	models_[R_Arm]->Draw(worldTransform_parts_[R_Arm], viewProjection);
 
 	for (PlayerBullet* bullet : bullets_) {
 		bullet->Draw(viewProjection);
@@ -183,26 +207,41 @@ void Player::SetViewProjection(const ViewProjection* viewProjection) {
 }
 
 void Player::ModelInitialize() {
-	worldTransform_body_.Initialize();
-	worldTransform_head_.Initialize();
-	worldTransform_l_arm_.Initialize();
-	worldTransform_r_arm_.Initialize();
-	worldTransform_wepon_.Initialize();
+	//worldTransform_body_.Initialize();
+	//worldTransform_head_.Initialize();
+	//worldTransform_l_arm_.Initialize();
+	//worldTransform_r_arm_.Initialize();
+	//worldTransform_wepon_.Initialize();
+	for (int i = 0; i < 5; i++) {
+		worldTransform_parts_[i].Initialize();
+	}
 
-	worldTransform_body_.parent_ = &worldTransform_;
 
-	worldTransform_head_.parent_ = &worldTransform_;
-	worldTransform_head_.translation_.y += 4.3f;
+	worldTransform_parts_[Body].parent_ = &worldTransform_;
 
-	worldTransform_l_arm_.parent_ = &worldTransform_body_;
-	worldTransform_l_arm_.translation_.y += 4.0f;
-	worldTransform_l_arm_.translation_.x -= 1.0f;
+	worldTransform_parts_[Head].parent_ = &worldTransform_;
+	worldTransform_parts_[Head].translation_.y += 4.3f;
 
-	worldTransform_r_arm_.parent_ = &worldTransform_body_;
-	worldTransform_r_arm_.translation_.y += 4.0f;
-	worldTransform_r_arm_.translation_.x += 1.0f;
+	worldTransform_parts_[L_Arm].parent_ = &worldTransform_parts_[Body];
+	worldTransform_parts_[L_Arm].translation_.y += 4.0f;
+	worldTransform_parts_[L_Arm].translation_.x -= 1.0f;
 
-	worldTransform_wepon_.parent_ = &worldTransform_;
+	worldTransform_parts_[R_Arm].parent_ = &worldTransform_parts_[Body];
+	worldTransform_parts_[R_Arm].translation_.y += 4.0f;
+	worldTransform_parts_[R_Arm].translation_.x += 1.0f;
+
+	worldTransform_parts_[Wepon].parent_ = &worldTransform_;
+
+	//worldTransform_body_.parent_ = &worldTransform_;
+	//worldTransform_head_.parent_ = &worldTransform_;
+	//worldTransform_head_.translation_.y += 4.3f;
+	//worldTransform_l_arm_.parent_ = &worldTransform_body_;
+	//worldTransform_l_arm_.translation_.y += 4.0f;
+	//worldTransform_l_arm_.translation_.x -= 1.0f;
+	//worldTransform_r_arm_.parent_ = &worldTransform_body_;
+	//worldTransform_r_arm_.translation_.y += 4.0f;
+	//worldTransform_r_arm_.translation_.x += 1.0f;
+	//worldTransform_wepon_.parent_ = &worldTransform_;
 }
 
 void Player::Attack() {
@@ -211,18 +250,35 @@ void Player::Attack() {
 	ImGui::SliderInt("timer", &timer_, 0, 120);
 	ImGui::End();
 
-	if (input_->IsPressMouse(0)) {
-		if (timer_ < 0) {
-			isAttack_ = true;
-			timer_ = kBulletoffset;
-		} else if (timer_ >= 0) {
+	XINPUT_STATE joystate;
+	if (input_->GetJoystickState(0, joystate)) {
+		if (joystate.Gamepad.wButtons == XINPUT_GAMEPAD_RIGHT_SHOULDER) {
+			if (timer_ < 0) {
+				isAttack_ = true;
+				timer_ = kBulletoffset;
+			} else if (timer_ >= 0) {
+				isAttack_ = false;
+				timer_--;
+			}
+		} else {
 			isAttack_ = false;
-			timer_--;
+			timer_ = 0;
 		}
+
 	}
 	else {
-		isAttack_ = false; 
-		timer_ = 0;
+		if (input_->IsPressMouse(0)) {
+			if (timer_ < 0) {
+				isAttack_ = true;
+				timer_ = kBulletoffset;
+			} else if (timer_ >= 0) {
+				isAttack_ = false;
+				timer_--;
+			}
+		} else {
+			isAttack_ = false;
+			timer_ = 0;
+		}
 	}
 
 
@@ -230,7 +286,7 @@ void Player::Attack() {
 		const float kBulletSpeed = 1.0f;
 		Vector3 velosity = {0.0f, 0.0f, kBulletSpeed};
 
-		velosity = MyMath::TransformNormal(velosity, worldTransform_head_.matWorld_);
+		velosity = MyMath::TransformNormal(velosity, worldTransform_parts_[Head].matWorld_);
 
 		PlayerBullet* newBullet = new PlayerBullet();
 		newBullet->Initialize(bulletModels_, GetWorldPosition(), velosity);

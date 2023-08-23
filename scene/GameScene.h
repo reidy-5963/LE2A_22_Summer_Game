@@ -6,6 +6,7 @@
 
 #include <memory>
 #include "Player.h"
+#include "Enemy.h"
 #include "FollowCamera.h"
 #include "skydome.h"
 #include "Ground.h"
@@ -91,6 +92,19 @@ private: // メンバ変数
 	// 追従カメラ
 	std::unique_ptr<FollowCamera> followCamera_ = nullptr;
 #pragma endregion
+
+	
+#pragma region 敵
+	//
+	std::unique_ptr<Enemy> enemy_ = nullptr;
+	//
+	std::unique_ptr<Model> e_body_model_ = nullptr;
+	std::unique_ptr<Model> e_l_wepon_model_ = nullptr;
+	std::unique_ptr<Model> e_r_wepon_model_ = nullptr;
+
+
+#pragma endregion
+
 
 	uint32_t heartTex_{};
 	std::unique_ptr<Sprite> p_heart_ = nullptr;

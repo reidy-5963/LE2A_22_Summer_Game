@@ -93,11 +93,13 @@ public: // メンバ関数
 	const ViewProjection* viewProjection_ = nullptr;
 
 	// 各部位のワールド変換データ
-	WorldTransform worldTransform_body_;
-	WorldTransform worldTransform_head_;
-	WorldTransform worldTransform_l_arm_;
-	WorldTransform worldTransform_r_arm_;
-	WorldTransform worldTransform_wepon_;
+	WorldTransform worldTransform_parts_[5];
+
+	//WorldTransform worldTransform_body_;
+	//WorldTransform worldTransform_head_;
+	//WorldTransform worldTransform_l_arm_;
+	//WorldTransform worldTransform_r_arm_;
+	//WorldTransform worldTransform_wepon_;
 
 	//
 	PlayerBullet* bullet_ = nullptr;
