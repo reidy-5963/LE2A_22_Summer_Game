@@ -33,6 +33,10 @@ void GameScene::Initialize() {
 	ground_->Initialize(groundModel_.get(), {0.0f, 0.0f, 0.0f});	
 #pragma endregion
 #pragma region プレイヤー
+	// 各Sprite用のテクスチャの読み込み
+	heartTex_ = TextureManager::Load("heart.png");
+	reticleTex_ = TextureManager::Load("reticle.png");
+
 	// プレイヤーの生成
 	player_ = std::make_unique<Player>();
 	// プレイヤーのモデルの生成
@@ -49,11 +53,11 @@ void GameScene::Initialize() {
 	    p_r_arm_model_.get(), 
 		p_wepon_model_.get(),
 	};
+	player_->SetReticle(reticleTex_);
+	player_->SetHeart(heartTex_);
+
 	// プレイヤーの初期化処理
 	player_->Initialize(playerModels);
-	heartTex_ = TextureManager::Load("heart.png");
-	p_heart_.reset(Sprite::Create(heartTex_, {0.0f, 0.0f}));
-
 
 	// 追従カメラの生成
 	followCamera_ = std::make_unique<FollowCamera>();
@@ -86,6 +90,8 @@ void GameScene::Initialize() {
 	};
 	// プレイヤーの初期化処理
 	enemy_->Initialize(enemyModels);
+	enemy_->SetPlayer(player_.get());
+
 #pragma endregion
 
 
@@ -95,6 +101,10 @@ void GameScene::Update() {
 
 
 	if (!isPoseMode_) {
+		if (controlMouse) {
+			ShowCursor(false);
+			controlMouse = false;
+		}
 		ImGui::Begin("GameScene");
 		ImGui::Text("press esc -> pose");
 		ImGui::End();
@@ -137,6 +147,11 @@ void GameScene::Update() {
 		viewProjection_.TransferMatrix();
 	} 
 	else if (isPoseMode_) {
+		if (!controlMouse) {
+			ShowCursor(true);
+			controlMouse = true;
+		}
+
 		ImGui::Begin("GameScene");
 		ImGui::Text("press esc -> game");
 		ImGui::Text("press 1 -> Title");
@@ -208,7 +223,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
-	p_heart_->Draw();
+	player_->DrawUI();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();

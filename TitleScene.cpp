@@ -18,8 +18,16 @@ void TitleScene::Update() {
 	ImGui::Text("press Space");
 	ImGui::End();
 
-	if (input_->TriggerKey(DIK_SPACE)) {
-		scenedNo_ = GAME_S;
+	XINPUT_STATE joystate;
+	if (input_->GetJoystickState(0, joystate)) {
+		if (joystate.Gamepad.wButtons == XINPUT_GAMEPAD_B) {
+			scenedNo_ = GAME_S;
+		}
+	}
+	else {
+		if (input_->TriggerKey(DIK_SPACE)) {
+			scenedNo_ = GAME_S;
+		}
 	}
 
 }

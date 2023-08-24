@@ -41,7 +41,7 @@ private: // メンバ変数
 	// マウスの位置(preは前フレーム)
 	POINT mousePos_;
 	POINT preMousePos_;
-
+	POINT allMousePos_;
 	// 
 	float xCameraRotate_ = 0.0f;
 	float yCameraRotate_ = 0.0f;

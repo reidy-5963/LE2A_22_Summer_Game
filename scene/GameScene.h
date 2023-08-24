@@ -86,6 +86,11 @@ private: // メンバ変数
 	// プレイヤーの武器モデル
 	std::unique_ptr<Model> p_gun_model_ = nullptr;
 	std::unique_ptr<Model> p_bullet_model_ = nullptr;
+
+	
+	uint32_t reticleTex_;
+	uint32_t heartTex_;
+
 #pragma endregion
 
 #pragma region 追従カメラ
@@ -104,9 +109,6 @@ private: // メンバ変数
 
 
 #pragma endregion
-
-
-	uint32_t heartTex_{};
-	std::unique_ptr<Sprite> p_heart_ = nullptr;
 	bool isPoseMode_ = false;
+	bool controlMouse = true;
 };

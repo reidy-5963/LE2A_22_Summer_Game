@@ -28,6 +28,22 @@ public:
 	static float Length(const Vector3& v);
 
 	/// <summary>
+	/// 長さ(ノルム)
+	/// </summary>
+	/// <param name="v">ベクトル</param>
+	/// <returns></returns>
+	static float Length(const Vector2& v);
+
+
+	/// <summary>
+	/// 正規化
+	/// </summary>
+	/// <param name="v">ベクトル</param>
+	/// <returns></returns>
+	static Vector2 Normalize(const Vector2& v);
+
+
+	/// <summary>
 	/// 
 	/// </summary>
 	/// <param name="num"></param>

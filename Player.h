@@ -6,6 +6,8 @@
 
 #include "PlayerBullet.h"
 
+#include "Sprite.h"
+
 //class GameScene;
 
 /// <summary>
@@ -54,6 +56,8 @@ public: // メンバ関数
 	/// <param name="viewProjection">ViewProjection</param>
 	void Draw(const ViewProjection& viewProjection) override;
 
+	void DrawUI();
+
 	/// <summary>
 	/// ViewProjectionの設定
 	/// </summary>
@@ -86,6 +90,10 @@ public: // メンバ関数
 
 	void SetBulletModel(const std::vector<Model*>& bulletModels) { bulletModels_ = bulletModels; }
 
+	void SetReticle(uint32_t texture) { texReticle_ = texture; }
+
+	void SetHeart(uint32_t texture) { heartTex_ = texture; }
+
 	private: // メンバ変数
 	// 入力関係
 	Input* input_ = nullptr;
@@ -95,24 +103,23 @@ public: // メンバ関数
 	// 各部位のワールド変換データ
 	WorldTransform worldTransform_parts_[5];
 
-	//WorldTransform worldTransform_body_;
-	//WorldTransform worldTransform_head_;
-	//WorldTransform worldTransform_l_arm_;
-	//WorldTransform worldTransform_r_arm_;
-	//WorldTransform worldTransform_wepon_;
-
-	//
+	// 弾
 	PlayerBullet* bullet_ = nullptr;
 	std::list<PlayerBullet*> bullets_;
+	// 弾のモデル
+	std::vector<Model*> bulletModels_;
+
 
 	bool isAttack_ = false;
 	bool isJump_ = false;
 	static const int kBulletoffset = 15;
 
+	// 弾のタイマー
 	int timer_ = 1;
 
-	//std::unique_ptr<GameScene> gameScene_;
-	std::vector<Model*> bulletModels_;
-
-
+	WorldTransform worldTransform_3dReticle_;
+	uint32_t texReticle_ = 0u;
+	uint32_t heartTex_ = 0u;
+	std::unique_ptr<Sprite> sprite_2dReticle_ = nullptr;
+	std::unique_ptr<Sprite> p_heart_ = nullptr;
 };

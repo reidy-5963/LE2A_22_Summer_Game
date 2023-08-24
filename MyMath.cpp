@@ -15,6 +15,15 @@ float MyMath::Length(const Vector3& v) {
 
 	return result;
 }
+
+float MyMath::Length(const Vector2& v) {
+	float result;
+	result = sqrtf(v.x * v.x + v.y * v.y);
+
+	return result;
+}
+
+
 //float MyMath::Clamp(float num, float max, float min) {
 //	if (num > max) {
 //		return max;
@@ -26,6 +35,19 @@ float MyMath::Length(const Vector3& v) {
 //		return num;
 //	}
 //}
+Vector2 MyMath::Normalize(const Vector2& v) {
+	Vector2 result{};
+	if (v.x == 0.0f && v.y == 0.0f) {
+		result.x = 0.0f;
+		result.y = 0.0f;
+		return result;
+	}
+
+	result.x = v.x / Length(v);
+	result.y = v.y / Length(v);
+
+	return result;
+}
 
 
 
