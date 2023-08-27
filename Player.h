@@ -19,20 +19,24 @@ public: // サブクラス
 	/// モデルの配列番号
 	/// </summary>
 	enum modelIndex {
-		Body,
-		Head,
-		L_Arm,
-		R_Arm,
-		Wepon
+		Body,	// 体
+		Head,	// 頭
+		L_Arm,	// 左腕
+		R_Arm,	// 右腕
+		Wepon	// 
 	};
 
 public: // メンバ関数
-	Player() {}
-	~Player() {
-		for (PlayerBullet* bullet : bullets_) {
-			delete bullet;
-		}
-	}
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	Player();
+	
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~Player();
 
 	/// <summary>
 	/// 初期化処理 
@@ -46,16 +50,70 @@ public: // メンバ関数
 	void Update() override;
 
 	/// <summary>
-	/// 通常状態の更新処理
-	/// </summary>
-	void RootUpdate();
-
-	/// <summary>
 	/// 描画処理
 	/// </summary>
 	/// <param name="viewProjection">ViewProjection</param>
 	void Draw(const ViewProjection& viewProjection) override;
 
+	/// <summary>
+	/// もし当たっていた場合の処理
+	/// </summary>
+	void OnCollision(float damage) override;
+
+	/// <summary>
+	/// グローバル変数の取得
+	/// </summary>
+	void ApplyGlobalVariavles() override;
+
+	/// <summary>
+	///
+	/// </summary>
+	void InitializeGlobalVariavles() override;
+
+	/// <summary>
+	/// 浮遊ギミック更新
+	/// </summary>
+	void UpdateFloatingGimmick() override;
+
+	/// <summary>
+	/// 腕ふりギミック更新
+	/// </summary>
+	void UpdateArmGimmick() override;
+
+	/// <summary>
+	/// 攻撃を食らったときの動き
+	/// </summary>
+	void DamageGimmick() override;
+
+
+	/// <summary>
+	/// 各部位のモデルの初期化処理
+	/// </summary>
+	void ModelInitialize(); 
+
+	/// <summary>
+	/// 通常状態の更新処理
+	/// </summary>
+	void RootUpdate();
+
+	/// <summary>
+	/// 攻撃の更新処理
+	/// </summary>
+	void Attack();
+
+	/// <summary>
+	/// 2D,3Dレティクルの更新処理
+	/// </summary>
+	void ReticleUpdate();
+
+	/// <summary>
+	/// 弾が有効かどうか
+	/// </summary>
+	void BulletIsDead();
+
+	/// <summary>
+	/// 2dのUI関係の描画処理
+	/// </summary>
 	void DrawUI();
 
 	/// <summary>
@@ -65,61 +123,76 @@ public: // メンバ関数
 	void SetViewProjection(const ViewProjection* viewProjection);
 
 	/// <summary>
-	/// 各部位のモデルの初期化処理
+	/// 弾のモデル設定
 	/// </summary>
-	void ModelInitialize(); 
-
-	/// <summary>
-	/// 
-	/// </summary>
-	void Attack();
-
-	void MauseUpdate();
-
-	//void SetGameScene(GameScene* gameScene) { gameScene_.reset(gameScene); }
-	void BulletIsDead() {
-		bullets_.remove_if([](PlayerBullet* bullet) {
-			if (bullet->IsDead()) {
-				delete bullet;
-				return true;
-			}
-			return false;
-		}); 
-	
-	}
-
+	/// <param name="bulletModels"></param>
 	void SetBulletModel(const std::vector<Model*>& bulletModels) { bulletModels_ = bulletModels; }
 
+	/// <summary>
+	/// レティクルの設定
+	/// </summary>
+	/// <param name="texture"></param>
 	void SetReticle(uint32_t texture) { texReticle_ = texture; }
 
+	/// <summary>
+	/// 体力の設定
+	/// </summary>
+	/// <param name="texture"></param>
 	void SetHeart(uint32_t texture) { heartTex_ = texture; }
 
-	private: // メンバ変数
+	/// <summary>
+	///
+	/// </summary>
+	/// <returns></returns>
+	const std::list<PlayerBullet*>& GetBullets() { return bullets_; }
+
+private: // メンバ変数
+
+	// モデルの数
+	const int kModelNo = 5;
+
 	// 入力関係
 	Input* input_ = nullptr;
+
 	// ビュープロジェクション
 	const ViewProjection* viewProjection_ = nullptr;
-
-	// 各部位のワールド変換データ
-	WorldTransform worldTransform_parts_[5];
 
 	// 弾
 	PlayerBullet* bullet_ = nullptr;
 	std::list<PlayerBullet*> bullets_;
+
 	// 弾のモデル
 	std::vector<Model*> bulletModels_;
-
-
+	
+	// 弾を撃てるかどうか
 	bool isAttack_ = false;
+
+	// ジャンプできるかどうか
 	bool isJump_ = false;
-	static const int kBulletoffset = 15;
 
 	// 弾のタイマー
 	int timer_ = 1;
 
+
+	// 3dレティクルのワールド変換データ
 	WorldTransform worldTransform_3dReticle_;
+
+	// レティクルのテクスチャ
 	uint32_t texReticle_ = 0u;
+
+	// 体力のテクスチャ
 	uint32_t heartTex_ = 0u;
+
+	// 2dレティクルのスプライト
 	std::unique_ptr<Sprite> sprite_2dReticle_ = nullptr;
+
+	// 体力のスプライト
 	std::unique_ptr<Sprite> p_heart_ = nullptr;
+
+
+
+private: // 外部から書き換え可能な値
+	// 各部位のワールド変換データ
+	WorldTransform worldTransform_parts_[5];
+
 };

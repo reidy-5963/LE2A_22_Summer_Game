@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <Vector2.h>
 #include <Vector3.h>
 #include <json.hpp>
 #include <json_fwd.hpp>
@@ -12,7 +13,7 @@
 /// 
 /// </summary>
 class GlobalVariables {
-	using Item = std::variant<int32_t, float, Vector3>;
+	using Item = std::variant<int32_t, float, Vector2, Vector3>;
 	using Group = std::map<std::string, Item>;
 
 	//// 項目
@@ -37,8 +38,13 @@ public:
 
 	// 値のセット(int)
 	void SetValue(const std::string& groupName, const std::string& key, int32_t value);
+
 	// 値のセット(float)
 	void SetValue(const std::string& groupName, const std::string& key, float value);
+
+	// 値のセット(Vector2)
+	void SetValue(const std::string& groupName, const std::string& key, Vector2 value);
+
 	// 値のセット(Vector3)
 	void SetValue(const std::string& groupName, const std::string& key, Vector3 value);
 
@@ -66,14 +72,23 @@ public:
 
 	// 項目の追加(int)
 	void AddItem(const std::string& groupName, const std::string& key, int32_t value);
+
 	// 項目の追加(float)
 	void AddItem(const std::string& groupName, const std::string& key, float value);
+
 	// 項目の追加(Vector3)
 	void AddItem(const std::string& groupName, const std::string& key, Vector3 value);
 
+	// 項目の追加(Vector2)
+	void AddItem(const std::string& groupName, const std::string& key, Vector2 value);
+
 	int32_t GetIntValue(const std::string& groupName, const std::string& key);
+
 	float GetFloatValue(const std::string& groupName, const std::string& key);
+
 	Vector3 GetVector3Value(const std::string& groupName, const std::string& key);
+
+	Vector2 GetVector2Value(const std::string& groupName, const std::string& key);
 
 private:
 	GlobalVariables() = default;

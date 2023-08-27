@@ -42,8 +42,39 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// 全ての当たり判定処理
+	/// </summary>
+	void CheckAllCollisions();
 
-	//void AddPlayerBullet(PlayerBullet* bullet);
+	/// <summary>
+	/// 敵弾の追加
+	/// </summary>
+	/// <param name="enemyBullet"></param>
+	void AddEnemyBullet(EnemyBullet* enemyBullet);
+
+	/// <summary>
+	/// 敵の追加
+	/// </summary>
+	/// <param name="enemy"></param>
+	void AddEnemy(Enemy* enemy);
+
+	/// <summary>
+	/// 敵の初期化処理
+	/// </summary>
+	/// <param name="models"></param>
+	/// <param name="position"></param>
+	void EnemyIni(const std::vector<Model*>& models, const Vector3 position);
+
+	/// <summary>
+	/// 敵ポップデータの読み込み
+	/// </summary>
+	void LoadEnemyPopData();
+
+	/// <summary>
+	/// 敵ポップデータの更新処理
+	/// </summary>
+	void UpdateEnemyPopCommands();
 
 private: // メンバ変数
 	/// <summary>
@@ -68,7 +99,6 @@ private: // メンバ変数
 #pragma endregion
 
 #pragma region プレイヤー
-
 	// プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;
 	// プレイヤーのモデル
@@ -98,16 +128,23 @@ private: // メンバ変数
 	std::unique_ptr<FollowCamera> followCamera_ = nullptr;
 #pragma endregion
 
-	
+	std::stringstream enemyPopCommands;
+	bool isWait_ = false;
+	int32_t waitTimer_ = 0;
+
 #pragma region 敵
 	//
-	std::unique_ptr<Enemy> enemy_ = nullptr;
+	std::list<Enemy*> enemys_;
+	std::list<EnemyBullet*> enemyBullets_;
 	//
 	std::unique_ptr<Model> e_body_model_ = nullptr;
-	std::unique_ptr<Model> e_l_wepon_model_ = nullptr;
-	std::unique_ptr<Model> e_r_wepon_model_ = nullptr;
+	std::unique_ptr<Model> e_head_model_ = nullptr;
+	std::unique_ptr<Model> e_l_arm_model_ = nullptr;
+	std::unique_ptr<Model> e_r_arm_model_ = nullptr;
 
-
+	std::unique_ptr<Model> e_bullet_model_ = nullptr;
+	std::vector<Model*> enemyModels_;
+	std::vector<Model*> e_bullet_models;
 #pragma endregion
 	bool isPoseMode_ = false;
 	bool controlMouse = true;

@@ -73,6 +73,12 @@
     <Filter Include="ヘッダー ファイル\カメラ">
       <UniqueIdentifier>{fb8497d9-0e7c-4390-b30b-953df1def219}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\弾系">
+      <UniqueIdentifier>{08a92aa9-b60f-412c-a57b-34c6cb71a7f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\弾系">
+      <UniqueIdentifier>{8d4802eb-d920-4fd9-8259-e3ee3d894fd0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -123,11 +129,17 @@
     <ClCompile Include="TitleScene.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerBullet.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Enemy.cpp">
       <Filter>ソース ファイル\キャラオブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBullet.cpp">
+      <Filter>ソース ファイル\弾系</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBullet.cpp">
+      <Filter>ソース ファイル\弾系</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseBullet.cpp">
+      <Filter>ソース ファイル\弾系</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -251,11 +263,17 @@
     <ClInclude Include="TitleScene.h">
       <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerBullet.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>ヘッダー ファイル\キャラオブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBullet.h">
+      <Filter>ヘッダー ファイル\弾系</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBullet.h">
+      <Filter>ヘッダー ファイル\弾系</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseBullet.h">
+      <Filter>ヘッダー ファイル\弾系</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

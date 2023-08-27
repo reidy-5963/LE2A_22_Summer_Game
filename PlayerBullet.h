@@ -1,33 +1,44 @@
 #pragma once
-#include "Model.h"
-#include "WorldTransform.h"
+
+#include "BaseBullet.h"
 #include "ViewProjection.h"
 
-class PlayerBullet {
-public:
+class PlayerBullet : public BaseBullet {
+public: // メンバ関数
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="models"></param>
+	/// <param name="position"></param>
+	/// <param name="velosity"></param>
 	void Initialize(
-	    const std::vector<Model*>& models, const Vector3& position, const Vector3& velosity);
+	    const std::vector<Model*>& models,
+		const Vector3& position, const Vector3& velosity);
 
-	void Update();
+	/// <summary>
+	/// 
+	/// </summary>
+	void Update() override;
 
-	void Draw(const ViewProjection& viewProjection);
+	/// <summary>
+	/// 
+	/// </summary>
+	void Draw(const ViewProjection& viewProjection) override;
 
-	bool IsDead() const { return isDead_; }
+	/// <summary>
+	/// 
+	/// </summary>
+	void OnCollision() override;
 
-	void OnCollision();
+	/// <summary>
+	/// グローバル変数の取得
+	/// </summary>
+	void ApplyGlobalVariavles() override;
 
-	Vector3 GetWorldPosition();
+	/// <summary>
+	///
+	/// </summary>
+	void InitializeGlobalVariavles() override;
 
-private:
-	WorldTransform worldTransform_;
-	std::vector<Model*> models_;
-	uint32_t textureHandle_ = 0u;
-
-	Vector3 velosity_;
-
-	static const int kLifeTime = 60 * 5;
-
-	int deathTimer_ = kLifeTime;
-	
-	bool isDead_ = false;
+private: // メンバ変数
 };
