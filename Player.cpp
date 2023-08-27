@@ -104,7 +104,7 @@ void Player::Draw(const ViewProjection& viewProjection) {
 	// BaseCharacter::Draw(viewProjection);
 	// モデルの描画
 	models_[Body]->Draw(worldTransform_parts_[Body], viewProjection);
-	models_[Head]->Draw(worldTransform_parts_[Head], viewProjection);
+	//models_[Head]->Draw(worldTransform_parts_[Head], viewProjection);
 	models_[L_Arm]->Draw(worldTransform_parts_[L_Arm], viewProjection);
 	models_[R_Arm]->Draw(worldTransform_parts_[R_Arm], viewProjection);
 
