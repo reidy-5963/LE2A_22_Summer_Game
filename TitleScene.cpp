@@ -87,6 +87,7 @@ void TitleScene::Update() {
 	// コントローラー
 	XINPUT_STATE joystate;
 	TitleGimmick();
+	TitleLogoGimmick();
 	StartButtonGimmick();
 	EndButtonGimmick();
 	//
@@ -198,28 +199,32 @@ void TitleScene::InitializeGlobalVariavles() {
 	//
 	gloVars->CreateGroup(groupName);
 	gloVars->AddItem(groupName, "Title Logo Pos", titleLogoPos_);
+	gloVars->AddItem(groupName, "b_in_t_offset", b_in_t_offset);
+	gloVars->AddItem(groupName, "b_root_t_offset", b_root_t_offset);
+	gloVars->AddItem(groupName, "b_out_t_offset", b_out_t_offset);
+	gloVars->AddItem(groupName, "timer_", timerSet_);
+
 	gloVars->AddItem(groupName, "Start Button Pos In S", startButton_in_S_pos_);
 	gloVars->AddItem(groupName, "Start Button Pos In E", startButton_in_E_pos_);
-	gloVars->AddItem(groupName, "b_in_t_offset", b_in_t_offset);
 
-	gloVars->AddItem(groupName, "Start Button Pos Root S", startButton_root_S_pos_);
 	gloVars->AddItem(groupName, "Start Button Pos Root E", startButton_root_E_pos_);
-	gloVars->AddItem(groupName, "b_root_t_offset", b_root_t_offset);
 
-	gloVars->AddItem(groupName, "Start Button Pos Out S", startButton_out_S_pos_);
 	gloVars->AddItem(groupName, "Start Button Pos Out E", startButton_out_E_pos_);
-	gloVars->AddItem(groupName, "b_out_t_offset", b_out_t_offset);
+
+	gloVars->AddItem(groupName, "Title_Logo_In_S", titleLogo_in_S_pos_);
+	gloVars->AddItem(groupName, "Title_Logo_In_E", titleLogo_in_E_pos_);
+
+	gloVars->AddItem(groupName, "Title_Logo_Root_E", titleLogo_root_E_pos_);
+
+	gloVars->AddItem(groupName, "Title_Logo_Out_E", titleLogo_out_E_pos_);
 
 	gloVars->AddItem(groupName, "End Button Pos In S", endButton_in_S_pos_);
 	gloVars->AddItem(groupName, "End Button Pos In E", endButton_in_E_pos_);
-	gloVars->AddItem(groupName, "End Button Pos Root S", endButton_root_S_pos_);
+
 	gloVars->AddItem(groupName, "End Button Pos Root E", endButton_root_E_pos_);
-	gloVars->AddItem(groupName, "End Button Pos Out S", endButton_out_S_pos_);
+
 	gloVars->AddItem(groupName, "End Button Pos Out E", endButton_out_E_pos_);
 
-	gloVars->AddItem(groupName, "End Button Pos", endButtonPos_);
-
-	gloVars->AddItem(groupName, "timer_", timerSet_);
 }
 
 /// <summary>
@@ -232,26 +237,33 @@ void TitleScene::ApplyGlobalVariavles() {
 	const char* groupName = "Title";
 	// 作ったグループにあるアイテムから値を取得
 	titleLogoPos_ = gloVars->GetVector2Value(groupName, "Title Logo Pos");
-	startButton_in_S_pos_ = gloVars->GetVector2Value(groupName, "Start Button Pos In S");
-	startButton_in_E_pos_ = gloVars->GetVector2Value(groupName, "Start Button Pos In E");
 	b_in_t_offset = gloVars->GetFloatValue(groupName, "b_in_t_offset");
-
-	startButton_root_S_pos_ = gloVars->GetVector2Value(groupName, "Start Button Pos Root S");
-	startButton_root_E_pos_ = gloVars->GetVector2Value(groupName, "Start Button Pos Root E");
 	b_root_t_offset = gloVars->GetFloatValue(groupName, "b_root_t_offset");
-
-	startButton_out_S_pos_ = gloVars->GetVector2Value(groupName, "Start Button Pos Out S");
-	startButton_out_E_pos_ = gloVars->GetVector2Value(groupName, "Start Button Pos Out E");
 	b_out_t_offset = gloVars->GetFloatValue(groupName, "b_out_t_offset");
 
-	endButtonPos_ = gloVars->GetVector2Value(groupName, "End Button Pos");
 	timerSet_ = gloVars->GetIntValue(groupName, "timer_");
+
+	titleLogo_in_S_pos_ = gloVars->GetVector2Value(groupName, "Title_Logo_In_S");
+	titleLogo_in_E_pos_ = gloVars->GetVector2Value(groupName, "Title_Logo_In_E");
+
+	titleLogo_root_E_pos_ = gloVars->GetVector2Value(groupName, "Title_Logo_Root_E");
+
+	titleLogo_out_E_pos_ = gloVars->GetVector2Value(groupName, "Title_Logo_Out_E");
+
+
+	startButton_in_S_pos_ = gloVars->GetVector2Value(groupName, "Start Button Pos In S");
+	startButton_in_E_pos_ = gloVars->GetVector2Value(groupName, "Start Button Pos In E");
+
+	startButton_root_E_pos_ = gloVars->GetVector2Value(groupName, "Start Button Pos Root E");
+
+	startButton_out_E_pos_ = gloVars->GetVector2Value(groupName, "Start Button Pos Out E");
+
 
 	endButton_in_S_pos_ = gloVars->GetVector2Value(groupName, "End Button Pos In S");
 	endButton_in_E_pos_ = gloVars->GetVector2Value(groupName, "End Button Pos In E");
-	endButton_root_S_pos_ = gloVars->GetVector2Value(groupName, "End Button Pos Root S");
+	
 	endButton_root_E_pos_ = gloVars->GetVector2Value(groupName, "End Button Pos Root E");
-	endButton_out_S_pos_ = gloVars->GetVector2Value(groupName, "End Button Pos Out S");
+	
 	endButton_out_E_pos_ = gloVars->GetVector2Value(groupName, "End Button Pos Out E");
 }
 
