@@ -27,7 +27,7 @@ void BaseBullet::Update() {
 void BaseBullet::Draw(const ViewProjection& viewProjection) {
 	for (Model* model : models_) {
 		model->Draw(worldTransform_, viewProjection);
-	}
+ 	}
 }
 
 void BaseBullet::OnCollision() { isDead_ = true; }

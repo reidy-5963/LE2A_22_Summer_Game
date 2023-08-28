@@ -1,8 +1,8 @@
 #include "FollowCamera.h"
+#include "GlobalVariables.h"
 #include "ImGuiManager.h"
 #include "MyMath.h"
 #include "input/Input.h"
-#include "GlobalVariables.h"
 
 /// <summary>
 /// 初期化処理
@@ -10,9 +10,6 @@
 void FollowCamera::Initialize() {
 	// ビュープロジェクションの初期化処理
 	viewProjection_.Initialize();
-
-	// カーソルの位置を調整
-	SetCursorPos(int(WinApp::kWindowWidth / 2), int(WinApp::kWindowHeight / 2));
 
 	// グローバル変数系のシングルトンインスタンスを取得
 	GlobalVariables* gloVars = GlobalVariables::GetInstance();
@@ -22,7 +19,8 @@ void FollowCamera::Initialize() {
 	gloVars->CreateGroup(groupName);
 	gloVars->AddItem(groupName, "movemauseSpeed", move_mouseSpeed);
 	gloVars->AddItem(groupName, "movepadSpeed", move_padSpeed);
-	gloVars->AddItem(groupName, "offset", offset_);
+	gloVars->AddItem(groupName, "fpsView_", fpsView_);
+	gloVars->AddItem(groupName, "tpsView_", tpsView_);
 }
 
 /// <summary>
@@ -31,48 +29,48 @@ void FollowCamera::Initialize() {
 void FollowCamera::Update() {
 	ApplyGlobalVariavles();
 
+	ImGui::Begin("fps->tps");
+	ImGui::Checkbox("isFps", &isFps_);
+	ImGui::End();
+
 	// コントローラー
 	XINPUT_STATE joyState;
-	if (!isDamage_) {
-		// もしコントローラーなら
-		if (Input::GetInstance()->GetJoystickState(0, joyState)) {
-			// 左右の視点移動
-			if ((float)joyState.Gamepad.sThumbRX / SHRT_MAX != 0.0f) {
-				viewProjection_.rotation_.y +=
-				    (float)joyState.Gamepad.sThumbRX / SHRT_MAX * move_padSpeed;
-			}
-			// 上下の視点移動
-			if ((float)joyState.Gamepad.sThumbRY / SHRT_MAX != 0.0f) {
-				viewProjection_.rotation_.x -=
-				    (float)joyState.Gamepad.sThumbRY / SHRT_MAX * move_padSpeed;
-			}
+
+	//  もしコントローラーなら
+	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
+		// 左右の視点移動
+		if ((float)joyState.Gamepad.sThumbRX / SHRT_MAX != 0.0f) {
+			viewProjection_.rotation_.y +=
+			    (float)joyState.Gamepad.sThumbRX / SHRT_MAX * move_padSpeed;
 		}
-		// キーマウなら
-		else {
-			// 現在のカーソル位置を
-			GetCursorPos(&mousePos_);
+		// 上下の視点移動
+		if ((float)joyState.Gamepad.sThumbRY / SHRT_MAX != 0.0f) {
+			viewProjection_.rotation_.x -=
+			    (float)joyState.Gamepad.sThumbRY / SHRT_MAX * move_padSpeed;
+		}
+	}
+	// キーマウなら
+	else {
+		// 現在のカーソル位置を
+		GetCursorPos(&mousePos_);
 
-			// 初期位置から動かした距離を求める
-			xMouseDistance = float(mousePos_.x) - float(WinApp::kWindowWidth / 2);
-			yMouseDistance = float(mousePos_.y) - float(WinApp::kWindowHeight / 2);
+		// 初期位置から動かした距離を求める
+		xMouseDistance = float(mousePos_.x) - float(WinApp::kWindowWidth / 2);
+		yMouseDistance = float(mousePos_.y) - float(WinApp::kWindowHeight / 2);
 
-			// 左右に視点を動かすなら
-			if (xMouseDistance != 0.0f) {
-				viewProjection_.rotation_.y += xMouseDistance * move_mouseSpeed;
-			}
-			// 上下に視点を動かすなら
-			if (yMouseDistance != 0.0f) {
-				viewProjection_.rotation_.x += yMouseDistance * move_mouseSpeed;
-			}
-
-			// カーソルを固定
-			SetCursorPos(int(WinApp::kWindowWidth / 2), int(WinApp::kWindowHeight / 2));
+		// 左右に視点を動かすなら
+		if (xMouseDistance != 0.0f) {
+			viewProjection_.rotation_.y += xMouseDistance * move_mouseSpeed;
+		}
+		// 上下に視点を動かすなら
+		if (yMouseDistance != 0.0f) {
+			viewProjection_.rotation_.x += yMouseDistance * move_mouseSpeed;
 		}
 
+		// カーソルを固定
+		SetCursorPos(int(WinApp::kWindowWidth / 2), int(WinApp::kWindowHeight / 2));
 	}
-	if (isDamage_) {
-	}
-	
+
 	// 視点を上、もしくは下に動かしたときの上限
 	if (viewProjection_.rotation_.x > 1.0f) {
 		viewProjection_.rotation_.x = 1.0f;
@@ -84,6 +82,11 @@ void FollowCamera::Update() {
 	// もしターゲットがいるなら
 	if (target_) {
 		// ターゲットとカメラの距離
+		if (isFps_) {
+			offset_ = fpsView_;
+		} else if (!isFps_) {
+			offset_ = tpsView_;
+		}
 
 		// 回転行列の生成
 		Matrix4x4 rotateMat = MyMath::Multiply(
@@ -102,7 +105,6 @@ void FollowCamera::Update() {
 	// ビュープロジェクションの更新と転送
 	viewProjection_.UpdateMatrix();
 	viewProjection_.TransferMatrix();
-
 }
 
 /// <summary>
@@ -113,7 +115,6 @@ void FollowCamera::SetTarget(const WorldTransform* target) {
 	// 引数のターゲットに設定
 	target_ = target;
 }
-
 
 /// <summary>
 /// ViewProjectionの取得
@@ -133,5 +134,6 @@ void FollowCamera::ApplyGlobalVariavles() {
 	// 作ったグループにあるアイテムから値を取得
 	move_mouseSpeed = gloVars->GetFloatValue(groupName, "movemauseSpeed");
 	move_padSpeed = gloVars->GetFloatValue(groupName, "movepadSpeed");
-	offset_ = gloVars->GetVector3Value(groupName, "offset");
+	fpsView_ = gloVars->GetVector3Value(groupName, "fpsView_");
+	tpsView_ = gloVars->GetVector3Value(groupName, "tpsView_");
 }

@@ -3,29 +3,33 @@
 #include "WorldTransform.h"
 #include <cassert>
 
+/// <summary>
+/// 地面クラス
+/// </summary>
 class Ground {
-public:
+public: // メンバ関数
 	/// <summary>
-	/// 初期化
+	/// 初期化処理
 	/// </summary>
 	/// <param name="model">モデル</param>
 	/// <param name="position">位置</param>
 	void Initialize(Model* model, const Vector3& position);
 
 	/// <summary>
-	/// 更新
+	/// 更新処理
 	/// </summary>
 	void Update();
 
 	/// <summary>
-	/// 描画
+	/// 描画処理
 	/// </summary>
 	/// <param name="viewProjection">ビュープロジェクション</param>
 	void Draw(ViewProjection& viewProjection);
 
-private:
+private: // メンバ変数
 	// ワールド変換データ
 	WorldTransform worldTransform_;
+
 	// モデル
 	Model* model_ = nullptr;
 };

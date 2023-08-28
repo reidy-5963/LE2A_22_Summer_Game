@@ -28,7 +28,7 @@ public:
 	/// 初期化処理
 	/// </summary>
 	/// <param name="models">モデルデータ</param>
-	void Initialize(const std::vector<Model*>& models, const Vector3 position);
+	void Initialize(const std::vector<Model*>& models, const Vector3 position, bool isLast);
 
 	/// <summary>
 	/// 更新処理
@@ -113,7 +113,9 @@ public:
 	/// <returns></returns>
 	float GetDamage() { return damage_; }
 
-private: //
+	bool IsLast() { return isLast_; }
+
+	private: //
 
 	//
 	const int kModelNo = 4;
@@ -133,6 +135,7 @@ private: //
 	// 弾のタイマー
 	int timer_ = 1;
 
+	bool isLast_ = false;
 
 private: //
 

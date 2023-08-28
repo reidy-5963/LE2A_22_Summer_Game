@@ -3,11 +3,19 @@
 
 using namespace nlohmann;
 
+/// <summary>
+/// シングルトンインスタンスの取得
+/// </summary>
+/// <returns>シングルトンインスタンス</returns>
 GlobalVariables* GlobalVariables::GetInstance() {
 	static GlobalVariables instance;
 	return &instance;
 }
 
+/// <summary>
+/// グループの作成
+/// </summary>
+/// <param name="groupName">グループ名</param>
 void GlobalVariables::CreateGroup(const std::string& groupName) {
 	// 指定名のオブジェクトがなければ追加する
 	datas_[groupName];
@@ -36,7 +44,8 @@ void GlobalVariables::SetValue(const std::string& groupName, const std::string& 
 }
 
 // 値のセット(Vector3)
-void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, Vector3 value) {
+void GlobalVariables::SetValue(
+	const std::string& groupName, const std::string& key, Vector3 value) {
 	// グループの参照を取得
 	Group& group = datas_[groupName];
 	// 新しい項目のデータを設定
@@ -58,6 +67,9 @@ void GlobalVariables::SetValue(
 	group[key] = newItem;
 }
 
+/// <summary>
+/// 毎フレーム処理
+/// </summary>
 void GlobalVariables::Update() {
 	if (!ImGui::Begin("Global Variales", nullptr, ImGuiWindowFlags_MenuBar)) {
 		ImGui::End();
@@ -122,6 +134,10 @@ void GlobalVariables::Update() {
 	ImGui::End();
 }
 
+/// <summary>
+/// ファイルに書き出し
+/// </summary>
+/// <param name="groupName">グループ</param>
 void GlobalVariables::SaveFile(const std::string& groupName) {
 	// グループを検索
 	std::map<std::string, Group>::iterator itGroup = datas_.find(groupName);
@@ -196,7 +212,9 @@ void GlobalVariables::SaveFile(const std::string& groupName) {
 	ofs.close();
 }
 
-
+/// <summary>
+/// ディレクトリの全ファイル読み込み
+/// </summary>
 void GlobalVariables::LoadFiles() {
 	// ディレクトリがなければスキップする
 	std::filesystem::path dir(kDirectoryPath);
@@ -221,6 +239,10 @@ void GlobalVariables::LoadFiles() {
 	}
 }
 
+/// <summary>
+/// ファイルから読み込む
+/// </summary>
+/// <param name="groupName">グループ</param>
 void GlobalVariables::LoadFile(const std::string& groupName) {
 	// 読み込むjsonファイルのフルパスを合成する
 	std::string filePath = kDirectoryPath + groupName + ".json";
@@ -284,7 +306,6 @@ void GlobalVariables::LoadFile(const std::string& groupName) {
 }
 
 
-
 // 項目の追加(int)
 void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, int32_t value) {
 //	std::map<std::string, Item>::iterator itItem = datas_[groupName].items.find(key);
@@ -292,6 +313,7 @@ void GlobalVariables::AddItem(const std::string& groupName, const std::string& k
 		SetValue(groupName, key, value);
 	}
 }
+
 // 項目の追加(float)
 void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, float value) {
 	//std::map<std::string, Item>::iterator itItem = datas_[groupName].items.find(key);
@@ -299,6 +321,7 @@ void GlobalVariables::AddItem(const std::string& groupName, const std::string& k
 		SetValue(groupName, key, value);
 	}
 }
+
 // 項目の追加(Vector3)
 void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, Vector3 value) {
 	//std::map<std::string, Item>::iterator itItem = datas_[groupName].items.find(key);
@@ -315,6 +338,7 @@ void GlobalVariables::AddItem(const std::string& groupName, const std::string& k
 	}
 }
 
+// 値の取得(int)
 int32_t GlobalVariables::GetIntValue(const std::string& groupName, const std::string& key) {
 	assert(datas_.find(groupName) != datas_.end());
 	// グループの参照を取得
@@ -324,6 +348,8 @@ int32_t GlobalVariables::GetIntValue(const std::string& groupName, const std::st
 
 	return std::get<0>(group[key]);
 }
+
+// 値の取得(float)
 float GlobalVariables::GetFloatValue(const std::string& groupName, const std::string& key) {
 	assert(datas_.find(groupName) != datas_.end());
 	// グループの参照を取得
@@ -334,6 +360,7 @@ float GlobalVariables::GetFloatValue(const std::string& groupName, const std::st
 	return std::get<1>(group[key]);
 }
     
+// 値の取得(Vector3)
 Vector3 GlobalVariables::GetVector3Value(const std::string& groupName, const std::string& key) {
 	assert(datas_.find(groupName) != datas_.end());
 	// グループの参照を取得
@@ -344,6 +371,7 @@ Vector3 GlobalVariables::GetVector3Value(const std::string& groupName, const std
 	return std::get<3>(group[key]);
 }
 
+// 値の取得(Vector2)
 Vector2 GlobalVariables::GetVector2Value(const std::string& groupName, const std::string& key) {
 	assert(datas_.find(groupName) != datas_.end());
 	// グループの参照を取得

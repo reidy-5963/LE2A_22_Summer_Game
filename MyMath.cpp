@@ -986,3 +986,59 @@ float MyMath::Mymin(float a, float b) {
 //
 //	return false;
 //}
+
+//
+float MyMath::lerp(float t, float start, float end) { 
+	return (1.0f - t) * start + t * end;
+}
+
+float MyMath::EaseInQuadF(float t, float start, float end) {
+	float easeT = t * t;
+	return (1.0f - easeT) * start + easeT * end;
+}
+
+float MyMath::EaseOutQuadF(float t, float start, float end) {
+	float easeT = 1.0f - powf(1.0f - t, 2.0f);
+	return (1.0f - easeT) * start + easeT * end;
+}
+
+float MyMath::EaseInOutQuadF(float t, float start, float end) {
+	float easeT = t > 0.5f ? 2.0f * t * t
+	                         : 1.0f - powf(-2.0f * t + 2.0f, 2.0f) / 2.0f;
+
+	return (1.0f - easeT) * start + easeT * end;
+}
+
+float MyMath::EaseInCubicF(float t, float start, float end) {
+	float easeT = t * t * t;
+	return (1.0f - easeT) * start + easeT * end;
+}
+
+float MyMath::EaseOutCubicF(float t, float start, float end) {
+	float easeT = 1.0f - powf(1.0f - t, 3.0f);
+	return (1.0f - easeT) * start + easeT * end;
+}
+
+float MyMath::EaseInOutCubicF(float t, float start, float end) {
+	float easeT = t > 0.5f ? 4.0f *t *t * t
+	                                : 1.0f - powf(-2.0f * t + 2, 3.0f) / 2.0f;
+
+	return (1.0f - easeT) * start + easeT * end;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

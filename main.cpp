@@ -8,8 +8,6 @@
 #include "WinApp.h"
 #include "GlobalVariables.h"
 
-
-
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	WinApp* win = nullptr;
@@ -56,6 +54,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	axisIndicator = AxisIndicator::GetInstance();
 	axisIndicator->Initialize();
 
+	// 
 	primitiveDrawer = PrimitiveDrawer::GetInstance();
 	primitiveDrawer->Initialize();
 #pragma endregion
@@ -99,6 +98,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		imguiManager->Draw();
 		// 描画終了
 		dxCommon->PostDraw();
+
+		// もしゲーム終了を受け取ったら
+		if (Scene->IsEnd()) {
+			break;
+		}
 	}
 
 	// 各種解放

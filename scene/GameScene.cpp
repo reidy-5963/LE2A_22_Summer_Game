@@ -4,8 +4,14 @@
 #include <cassert>
 #include <fstream>
 
+/// <summary>
+/// コンストクラタ
+/// </summary>
 GameScene::GameScene() {}
 
+/// <summary>
+/// デストラクタ
+/// </summary>
 GameScene::~GameScene() {
 	// 敵の開放
 	for (Enemy* enemy : enemys_) {
@@ -17,9 +23,14 @@ GameScene::~GameScene() {
 	}
 }
 
+/// <summary>
+/// 初期化処理
+/// </summary>
 void GameScene::Initialize() {
 	// ベース部分の初期化処理
 	BaseScene::Initialize();
+
+	enemys_.resize(0);
 
 	// このシーン番号の設定
 	scenedNo_ = GAME_S;
@@ -29,6 +40,7 @@ void GameScene::Initialize() {
 
 	// ポーズモードフラグの初期化処理
 	isPoseMode_ = false;
+	isEnemyEnd_ = false;
 
 #pragma region 天球
 	// 天球モデルの生成
@@ -109,9 +121,13 @@ void GameScene::Initialize() {
 	e_bullet_model_.reset((Model::CreateFromOBJ("Bullet", true)));
 	e_bullet_models = {e_bullet_model_.get()};
 	LoadEnemyPopData();
+
 #pragma endregion
 }
 
+/// <summary>
+/// 更新処理
+/// </summary>
 void GameScene::Update() {
 	XINPUT_STATE joyState;
 
@@ -154,6 +170,7 @@ void GameScene::Update() {
 		ground_->Update();
 
 		// プレイヤーの更新処理
+		player_->SetIsFps(followCamera_->IsFps());
 		player_->Update();
 		UpdateEnemyPopCommands();
 		//
@@ -186,6 +203,14 @@ void GameScene::Update() {
 		CheckAllCollisions();
 		followCamera_->SetIsDamage(player_->IsDamage());
 		followCamera_->SetRotation(player_->GetWorldTransform().rotation_);
+		
+		if (player_->IsDead()) {
+			scenedNo_ = OVER_S;
+		}
+		if (isEnemyEnd_ && enemys_.size() == 0) {
+			scenedNo_ = CLEAR_S;
+		}
+
 	} 
 	// もしポーズ中なら
 	else if (isPoseMode_) {
@@ -217,9 +242,19 @@ void GameScene::Update() {
 		if (input_->TriggerKey(DIK_1)) {
 			scenedNo_ = TITLE_S;
 		}
+		if (input_->TriggerKey(DIK_2)) {
+			scenedNo_ = CLEAR_S;
+		}
+		if (input_->TriggerKey(DIK_3)) {
+			scenedNo_ = OVER_S;
+		}
+
 	}
 }
 
+/// <summary>
+/// 描画処理
+/// </summary>
 void GameScene::Draw() {
 
 	// コマンドリストの取得
@@ -280,6 +315,9 @@ void GameScene::Draw() {
 #pragma endregion
 }
 
+/// <summary>
+/// 全ての当たり判定処理
+/// </summary>
 void GameScene::CheckAllCollisions() {
 	Vector3 posA, posB;
 
@@ -343,25 +381,42 @@ void GameScene::CheckAllCollisions() {
 #pragma endregion
 }
 
+/// <summary>
+/// 敵弾の追加
+/// </summary>
+/// <param name="enemyBullet">敵弾</param>
 void GameScene::AddEnemyBullet(EnemyBullet* enemyBullet) {
 	//
 	enemyBullets_.push_back(enemyBullet);
 }
 
+/// <summary>
+/// 敵の追加
+/// </summary>
+/// <param name="enemy">敵</param>
 void GameScene::AddEnemy(Enemy* enemy) {
 	//
 	enemys_.push_back(enemy);
 }
 
-void GameScene::EnemyIni(const std::vector<Model*>& models, const Vector3 position) {
+/// <summary>
+/// 敵の初期化処理
+/// </summary>
+/// <param name="models">敵のモデル</param>
+/// <param name="position">敵の位置</param>
+void GameScene::EnemyIni(
+    const std::vector<Model*>& models, const Vector3 position, bool isLastEnemy) {
 	Enemy* newEnemy = new Enemy();
-	newEnemy->Initialize(models, position);
+	newEnemy->Initialize(models, position, isLastEnemy);
 	newEnemy->SetPlayer(player_.get());
 	newEnemy->SetGameScene(this);
 	newEnemy->SetBulletModel(e_bullet_models);
 	AddEnemy(newEnemy);
 }
 
+/// <summary>
+/// 敵ポップデータの読み込み
+/// </summary>
 void GameScene::LoadEnemyPopData() {
 	std::ifstream file;
 	file.open("./Resources/enemyPop.csv");
@@ -371,6 +426,10 @@ void GameScene::LoadEnemyPopData() {
 
 	file.close();
 }
+
+/// <summary>
+/// 敵ポップデータの更新処理
+/// </summary>
 void GameScene::UpdateEnemyPopCommands() {
 	if (isWait_) {
 		waitTimer_--;
@@ -401,8 +460,9 @@ void GameScene::UpdateEnemyPopCommands() {
 			getline(line_stream, word, ',');
 			float z = (float)std::atof(word.c_str());
 
-			EnemyIni(enemyModels_, Vector3(x, y, z));
-		} else if (word.find("WAIT") == 0) {
+			EnemyIni(enemyModels_, Vector3(x, y, z), false);
+		} 
+		else if (word.find("WAIT") == 0) {
 			getline(line_stream, word, ',');
 
 			int32_t waitTime = atoi(word.c_str());
@@ -410,6 +470,22 @@ void GameScene::UpdateEnemyPopCommands() {
 			isWait_ = true;
 			waitTimer_ = waitTime;
 			break;
+		} 
+
+		else if (word.find("ENDPOP")) {
+			isEnemyEnd_ = true;
+
+			getline(line_stream, word, ',');
+			float x = (float)std::atof(word.c_str());
+
+			getline(line_stream, word, ',');
+			float y = (float)std::atof(word.c_str());
+
+			getline(line_stream, word, ',');
+			float z = (float)std::atof(word.c_str());
+
+			EnemyIni(enemyModels_, Vector3(x, y, z), true);
 		}
+
 	}
 }

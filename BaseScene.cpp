@@ -14,11 +14,14 @@ BaseScene::~BaseScene() {}
 /// 初期化処理
 /// </summary>
 void BaseScene::Initialize() {
-#pragma region DirectXと入力系と音系の初期化
+	// directXクラスのシングルトンインスタンス取得
 	dxCommon_ = DirectXCommon::GetInstance();
+
+	// 入力系クラスのシングルトンインスタンス取得
 	input_ = Input::GetInstance();
+
+	// 音系クラスのシングルトンインスタンス取得
 	audio_ = Audio::GetInstance();
-#pragma endregion
 }
 
 /// <summary>

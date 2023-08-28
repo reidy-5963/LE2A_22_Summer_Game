@@ -352,5 +352,16 @@ public:
 	/// <returns></returns>
 	//static bool IsCollision(const AABB& aabb, const Ray& ray);
 
+	static float lerp(float t, float start, float end);
+
+
+	static float EaseInQuadF(float t, float start, float end);
+	static float EaseOutQuadF(float t, float start, float end);
+	static float EaseInOutQuadF(float t, float start, float end);
+
+
+	static float EaseInCubicF(float t, float start, float end);
+	static float EaseOutCubicF(float t, float start, float end);
+	static float EaseInOutCubicF(float t, float start, float end);
 
 };

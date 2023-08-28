@@ -27,6 +27,9 @@ Player::~Player() {
 /// </summary>
 /// <param name="models">モデルデータ</param>
 void Player::Initialize(const std::vector<Model*>& models) { 
+	isClear_ = false;
+	isDead_ = false;
+
 
 	// 入力系の初期化
 	input_ = Input::GetInstance();
@@ -65,10 +68,6 @@ void Player::Update() {
 	ImGui::Text("hp : %f", hp_);
 	ImGui::End();
 	
-	if (hp_ < 0.0f) {
-		isDead_ = true;
-	}
-
 	// レティクル表示の更新処理
 	ReticleUpdate();
 
@@ -104,7 +103,10 @@ void Player::Draw(const ViewProjection& viewProjection) {
 	// BaseCharacter::Draw(viewProjection);
 	// モデルの描画
 	models_[Body]->Draw(worldTransform_parts_[Body], viewProjection);
-	//models_[Head]->Draw(worldTransform_parts_[Head], viewProjection);
+
+	if (!isFps_) {
+		models_[Head]->Draw(worldTransform_parts_[Head], viewProjection);
+	}
 	models_[L_Arm]->Draw(worldTransform_parts_[L_Arm], viewProjection);
 	models_[R_Arm]->Draw(worldTransform_parts_[R_Arm], viewProjection);
 

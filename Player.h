@@ -146,17 +146,17 @@ public: // メンバ関数
 	/// <returns></returns>
 	const std::list<PlayerBullet*>& GetBullets() { return bullets_; }
 
+	void SetIsFps(bool isFps) { isFps_ = isFps; }
+
 private: // メンバ変数
-
-	// モデルの数
-	const int kModelNo = 5;
-
 	// 入力関係
 	Input* input_ = nullptr;
 
-	// ビュープロジェクション
+	// 追従カメラ用のビュープロジェクション
 	const ViewProjection* viewProjection_ = nullptr;
 
+	// モデルの数
+	const int kModelNo = 5;
 	// 弾
 	PlayerBullet* bullet_ = nullptr;
 	std::list<PlayerBullet*> bullets_;
@@ -164,32 +164,36 @@ private: // メンバ変数
 	// 弾のモデル
 	std::vector<Model*> bulletModels_;
 	
+
+
+	// 3dレティクルのワールド変換データ
+	WorldTransform worldTransform_3dReticle_;
+
+	// 2dレティクルのスプライト
+	std::unique_ptr<Sprite> sprite_2dReticle_ = nullptr;
+	// レティクルのテクスチャ
+	uint32_t texReticle_ = 0u;
+
+
+	// 体力のスプライト
+	std::unique_ptr<Sprite> p_heart_ = nullptr;
+	// 体力のテクスチャ
+	uint32_t heartTex_ = 0u;
+
+
+	// 弾のタイマー
+	int timer_ = 1;
+
+	//
+	bool isFps_ = true;
+
 	// 弾を撃てるかどうか
 	bool isAttack_ = false;
 
 	// ジャンプできるかどうか
 	bool isJump_ = false;
 
-	// 弾のタイマー
-	int timer_ = 1;
-
-
-	// 3dレティクルのワールド変換データ
-	WorldTransform worldTransform_3dReticle_;
-
-	// レティクルのテクスチャ
-	uint32_t texReticle_ = 0u;
-
-	// 体力のテクスチャ
-	uint32_t heartTex_ = 0u;
-
-	// 2dレティクルのスプライト
-	std::unique_ptr<Sprite> sprite_2dReticle_ = nullptr;
-
-	// 体力のスプライト
-	std::unique_ptr<Sprite> p_heart_ = nullptr;
-
-
+	bool isClear_ = false;
 
 private: // 外部から書き換え可能な値
 	// 各部位のワールド変換データ

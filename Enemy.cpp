@@ -20,14 +20,14 @@ Enemy::~Enemy() {}
 /// 
 /// </summary>
 /// <param name="models"></param>
-void Enemy::Initialize(const std::vector<Model*>& models, const Vector3 position) {
+void Enemy::Initialize(const std::vector<Model*>& models, const Vector3 position, bool isLast) {
 	
 	// ベース部分の初期化処理
 	BaseCharacter::Initialize(models);
 
 	worldTransform_.translation_ = position;
 
-
+	isLast_ = isLast;
 	// 各部位のワールド変換データの初期化処理
 	for (int i = 0; i < kModelNo; i++) {
 		worldTransform_parts_[i].Initialize();
@@ -57,9 +57,6 @@ void Enemy::Update() {
 	ImGui::Text("hp : %f", hp_);
 	ImGui::End();
 
-	if (hp_ < 0.0f) {
-		isDead_ = true;
-	}
 
 
 	DamageGimmick();

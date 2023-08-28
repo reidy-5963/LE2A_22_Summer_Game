@@ -51,9 +51,16 @@ public: // メンバ関数
 		damagingAmplitude_ = amp;
 	}
 
+	bool IsFps() { return isFps_; }
+
 private: // メンバ変数
 	// ビュープロジェクション
 	ViewProjection viewProjection_;
+
+	// fps視点でのカメラ位置
+	Vector3 fpsView_ = {0.0f, 4.0f, 0.0f};
+	// tps視点でのカメラ位置
+	Vector3 tpsView_ = {0.0f, 4.0f, -30.0f};
 
 	// ターゲットになるワールド変換データ
 	const WorldTransform* target_ = nullptr;
@@ -85,4 +92,7 @@ private: // メンバ変数
 
 	// 浮遊動作の振れ幅
 	float damagingAmplitude_ = 60.0f;
+
+	//
+	bool isFps_ = true;
 };

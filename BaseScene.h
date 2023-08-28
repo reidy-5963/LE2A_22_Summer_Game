@@ -11,8 +11,10 @@
 /// シーン
 /// </summary>
 enum SCENE {
-	TITLE_S,
-	GAME_S,
+	TITLE_S,	// タイトルシーン
+	GAME_S,		// ゲームシーン
+	OVER_S,		// ゲームオーバーシーン
+	CLEAR_S		// ゲームクリアシーン
 };
 
 /// <summary>
@@ -48,23 +50,34 @@ public: // メンバ関数
 	/// <summary>
 	/// シーン番号の設定
 	/// </summary>
-	/// <param name="sceneNo"></param>
+	/// <param name="sceneNo">シーン番号</param>
 	void SetSceneNo(int sceneNo) { scenedNo_ = sceneNo; }
 	
 	/// <summary>
 	/// シーン番号の取得
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>シーン番号</returns>
 	int GetSceneNo() { return scenedNo_; }
+
+	/// <summary>
+	/// ゲーム終了かどうか
+	/// </summary>
+	/// <returns>ゲーム終了フラグ</returns>
+	bool IsEnd() { return isEnd_; }
 
 protected: // メンバ変数
 	// DirectXクラス
 	DirectXCommon* dxCommon_ = nullptr;
+
 	// 入力系クラス
 	Input* input_ = nullptr;
+
 	// 音系クラス
 	Audio* audio_ = nullptr;
 
 	// シーン番号
 	int scenedNo_ = 0;
+	
+	// ゲーム終了かどうか
+	bool isEnd_ = false;
 };
