@@ -26,12 +26,26 @@ void TitleScene::Initialize() {
 	// このシーン番号の設定
 	scenedNo_ = TITLE_S;
 
+	BGMHandle_ = audio_->LoadWave("PLAY.wav");
+	selectSEHandle_ = audio_->LoadWave("select01.wav");
 	// 各フラグの初期化
 	isStart = false;
 	isEnd_ = false;
 	isSelectButton_ = false;
-
+	isStartButtonGimmick = false;
+	isTitleLogoGimmick = false;
+	isEndButtonGimmick = false;
+	titleLogo_t_ = 0.0f;
+	startButton_t_ = 0.0f;
+	endButton_t_ = 0.0f;
+	titleLogoState_ = B_In;
+	startButtonState_ = B_In;
+	endButtonState_ = B_In;
+	blackoutAlpha_ = 1.0f;
 	selectButton = START;
+	titleGimmickTimer_ = 0.0f;
+	blackoutAlpha_ = 0.0f;
+	isTitleGimmick_ = false;
 	timer_ = timerSet_;
 #pragma region タイトルロゴ
 	// タイトルロゴテクスチャの読み込み
@@ -73,6 +87,17 @@ void TitleScene::Initialize() {
 	    {1.0f, 1.0f, 1.0f, 1.0f}, {0.5f, 0.5f}));
 #pragma endregion
 
+#pragma region 黒画面
+	// [始める]テクスチャの読み込み
+	blackoutTex_ = TextureManager::Load("BlackOut.png");
+
+	// [始める]の初期化処理
+	blackout_.reset(Sprite::Create(
+	    blackoutTex_, {float(WinApp::kWindowWidth / 2), float(WinApp::kWindowHeight / 2)},
+	    {1.0f, 1.0f, 1.0f, 1.0f}, {0.5f, 0.5f}));
+
+#pragma endregion
+
 	// グローバル変数の初期化処理
 	InitializeGlobalVariavles();
 }
@@ -83,6 +108,15 @@ void TitleScene::Initialize() {
 void TitleScene::Update() {
 	// グローバル変数の取得
 	ApplyGlobalVariavles();
+
+	if (bolume >= 0.7f) {
+		bolume = 0.7f;
+	} else if (bolume < 0.7f) {
+		bolume += 0.1f;
+	}
+	if (audio_->IsPlaying(BGMHandle_) == 0 || BGMHandle_ == -1) {
+		BGMHandle_ = audio_->PlayWave(BGMHandle_, true, bolume);
+	}
 
 	// コントローラー
 	XINPUT_STATE joystate;
@@ -110,7 +144,8 @@ void TitleScene::Update() {
 
 	// もしスタートフラグが有効なら
 	if (isStart) {
-		if (isEnd_startButtonGimmick && isEnd_endButtonGimmick) {
+		if (isEnd_startButtonGimmick && isEnd_endButtonGimmick && isEnd_titleLogoGimmick) {
+			audio_->StopWave(BGMHandle_);
 			// ゲームシーンへ
 			scenedNo_ = GAME_S;
 		}
@@ -126,6 +161,7 @@ void TitleScene::Update() {
 	//	scenedNo_ = OVER_S;
 	//}
 
+	blackout_->SetColor({1.0f, 1.0f, 1.0f, blackoutAlpha_});
 	title_->SetPosition(titleLogoPos_);
 	startButton_->SetPosition(startButtonPos_);
 	endButton_->SetPosition(endButtonPos_);
@@ -157,8 +193,9 @@ void TitleScene::Draw() {
 	if (isEndButtonGimmick) {
 		// [終わる] 描画処理
 		endButton_->Draw();
-
 	}
+
+	blackout_->Draw();
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -285,10 +322,17 @@ void TitleScene::KeyMouseUpdate() {
 
 	// もしボタン内にカーソルが入ったら
 	if (ButtonToCurSor(startButtonPos_, startButtonSize, mousePos_)) {
-		// テクスチャを差し替えてボタンが光る
-		startButton_->SetTextureHandle(startButton_select_Tex_);
+		if (!isStartSelect) {
+			audio_->PlayWave(selectSEHandle_, false, bolume);
+
+			// テクスチャを差し替えてボタンが光る
+			startButton_->SetTextureHandle(startButton_select_Tex_);
+			isStartSelect = true;
+		}
 		// もし左クリックしたらゲームスタート
 		if (input_->IsTriggerMouse(0)) {
+			audio_->PlayWave(selectSEHandle_, false, bolume);
+
 			isStart = true;
 		}
 	}
@@ -296,21 +340,31 @@ void TitleScene::KeyMouseUpdate() {
 	else {
 		// テクスチャは通常状態
 		startButton_->SetTextureHandle(startButtonTex_);
+		isStartSelect = false;
 	}
 
 	// もしボタン内にカーソルが入ったら
 	if (ButtonToCurSor(endButtonPos_, endButtonSize, mousePos_)) {
-		// テクスチャを差し替えてボタンが光る
-		endButton_->SetTextureHandle(endButton_select_Tex_);
+		if (!isEndSelect) {
+			audio_->PlayWave(selectSEHandle_, false, bolume);
+			
+
+			// テクスチャを差し替えてボタンが光る
+			endButton_->SetTextureHandle(endButton_select_Tex_);
+			isEndSelect = true;
+		}
 		// もし左クリックしたらゲームスタート
 		if (input_->IsTriggerMouse(0)) {
-			isEnd_ = true;
+			audio_->PlayWave(selectSEHandle_, false, bolume);
+
+			isEnd_ = false;
 		}
 	}
 	// カーソルがボタン外なら
 	else {
 		// テクスチャは通常状態
 		endButton_->SetTextureHandle(endButtonTex_);
+		isEndSelect = false;
 	}
 }
 
@@ -344,9 +398,12 @@ void TitleScene::JoyStateUpdate() {
 			if (joystate.Gamepad.sThumbLY > 0 ||
 			    joystate.Gamepad.wButtons == XINPUT_GAMEPAD_DPAD_UP) {
 				// フラグを有効に
-				isSelectButton_ = true; 
+				isSelectButton_ = true;
+				audio_->PlayWave(selectSEHandle_, false, bolume);
+
 				//もし選択がスタートなら
 				if (selectButton == START) {
+
 					// エンドに
 					selectButton = END;
 				}
@@ -360,6 +417,7 @@ void TitleScene::JoyStateUpdate() {
 			// もし下に動かしたら
 			if (joystate.Gamepad.sThumbLY < 0 ||
 			    joystate.Gamepad.wButtons == XINPUT_GAMEPAD_DPAD_DOWN) {
+				audio_->PlayWave(selectSEHandle_, false, bolume);
 				// フラグを有効に
 				isSelectButton_ = true;
 				// もし選択がスタートなら
@@ -383,6 +441,8 @@ void TitleScene::JoyStateUpdate() {
 			// もしAを押したら
 			if (joystate.Gamepad.wButtons == XINPUT_GAMEPAD_A &&
 				preJoyButton_ != XINPUT_GAMEPAD_A) {
+				audio_->PlayWave(selectSEHandle_, false, bolume);
+
 				// スタート
 				isStart = true;
 			}
@@ -395,6 +455,8 @@ void TitleScene::JoyStateUpdate() {
 			// もしAを押したら
 			if (joystate.Gamepad.wButtons == XINPUT_GAMEPAD_A &&
 			    preJoyButton_ != XINPUT_GAMEPAD_A) {
+				audio_->PlayWave(selectSEHandle_, false, bolume);
+
 				// 終了
 				isEnd_ = true;
 			}
@@ -432,9 +494,9 @@ void TitleScene::StartButtonGimmick() {
 	//
 	else if (isStartButtonGimmick) {
 		if (startButtonState_ == B_In) {
-			startButtonPos_.x = MyMath::EaseOutCubicF(
+			startButtonPos_.x = MyMath::EaseOutQuadF(
 			    startButton_t_, startButton_in_S_pos_.x, startButton_in_E_pos_.x);
-			startButtonPos_.y = MyMath::EaseOutCubicF(
+			startButtonPos_.y = MyMath::EaseOutQuadF(
 			    startButton_t_, startButton_in_S_pos_.y, startButton_in_E_pos_.y);
 
 			startButton_->SetColor({1.0f, 1.0f, 1.0f, startButton_t_});
@@ -452,9 +514,9 @@ void TitleScene::StartButtonGimmick() {
 		}
 		//
 		else if (startButtonState_ == B_Root) {
-			startButtonPos_.x = MyMath::EaseInOutCubicF(
+			startButtonPos_.x = MyMath::EaseOutQuadF(
 			    startButton_t_, startButton_root_S_pos_.x, startButton_root_E_pos_.x);
-			startButtonPos_.y = MyMath::EaseInOutCubicF(
+			startButtonPos_.y = MyMath::EaseOutQuadF(
 			    startButton_t_, startButton_root_S_pos_.y, startButton_root_E_pos_.y);
 
 			if (!isRootStartButton) {
@@ -487,9 +549,9 @@ void TitleScene::StartButtonGimmick() {
 		}
 		//
 		else if (startButtonState_ == B_Out) {
-			startButtonPos_.x = MyMath::EaseInCubicF(
+			startButtonPos_.x = MyMath::EaseInQuadF(
 			    startButton_t_, startButton_out_S_pos_.x, startButton_out_E_pos_.x);
-			startButtonPos_.y = MyMath::EaseInCubicF(
+			startButtonPos_.y = MyMath::EaseInQuadF(
 			    startButton_t_, startButton_out_S_pos_.y, startButton_out_E_pos_.y);
 
 			startButton_->SetColor({1.0f, 1.0f, 1.0f, (1.0f - startButton_t_)});
@@ -517,8 +579,10 @@ void TitleScene::EndButtonGimmick() {
 	//
 	else if (isEndButtonGimmick) {
 		if (endButtonState_ == B_In) {
-			endButtonPos_.x = MyMath::EaseOutCubicF(endButton_t_, endButton_in_S_pos_.x, endButton_in_E_pos_.x);
-			endButtonPos_.y = MyMath::EaseOutCubicF(endButton_t_, endButton_in_S_pos_.y, endButton_in_E_pos_.y);
+			endButtonPos_.x =
+			    MyMath::EaseOutQuadF(endButton_t_, endButton_in_S_pos_.x, endButton_in_E_pos_.x);
+			endButtonPos_.y =
+			    MyMath::EaseOutQuadF(endButton_t_, endButton_in_S_pos_.y, endButton_in_E_pos_.y);
 
 			endButton_->SetColor({1.0f, 1.0f, 1.0f, endButton_t_});
 
@@ -535,9 +599,9 @@ void TitleScene::EndButtonGimmick() {
 		}
 		//
 		else if (endButtonState_ == B_Root) {
-			endButtonPos_.x = MyMath::EaseInOutCubicF(
+			endButtonPos_.x = MyMath::EaseOutQuadF(
 			    endButton_t_, endButton_root_S_pos_.x, endButton_root_E_pos_.x);
-			endButtonPos_.y = MyMath::EaseInOutCubicF(
+			endButtonPos_.y = MyMath::EaseOutQuadF(
 			    endButton_t_, endButton_root_S_pos_.y, endButton_root_E_pos_.y);
 
 			if (!isRootEndButton) {
@@ -570,8 +634,10 @@ void TitleScene::EndButtonGimmick() {
 		}
 		//
 		else if (endButtonState_ == B_Out) {
-			endButtonPos_.x = MyMath::EaseInCubicF(endButton_t_, endButton_out_S_pos_.x, endButton_out_E_pos_.x);
-			endButtonPos_.y = MyMath::EaseInCubicF(endButton_t_, endButton_out_S_pos_.y, endButton_out_E_pos_.y);
+			endButtonPos_.x =
+			    MyMath::EaseInQuadF(endButton_t_, endButton_out_S_pos_.x, endButton_out_E_pos_.x);
+			endButtonPos_.y =
+			    MyMath::EaseInQuadF(endButton_t_, endButton_out_S_pos_.y, endButton_out_E_pos_.y);
 
 			endButton_->SetColor({1.0f, 1.0f, 1.0f, (1.0f - endButton_t_)});
 
@@ -616,9 +682,9 @@ void TitleScene::TitleLogoGimmick() {
 		}
 		//
 		else if (titleLogoState_ == B_Root) {
-			titleLogoPos_.x = MyMath::EaseInOutCubicF(
+			titleLogoPos_.x = MyMath::EaseOutCubicF(
 			    titleLogo_t_, titleLogo_root_S_pos_.x, titleLogo_root_E_pos_.x);
-			titleLogoPos_.y = MyMath::EaseInOutCubicF(
+			titleLogoPos_.y = MyMath::EaseOutCubicF(
 			    titleLogo_t_, titleLogo_root_S_pos_.y, titleLogo_root_E_pos_.y);
 
 			if (!isRoottitleLogo) {
@@ -658,6 +724,7 @@ void TitleScene::TitleLogoGimmick() {
 
 			title_->SetColor({1.0f, 1.0f, 1.0f, (1.0f - titleLogo_t_)});
 
+			blackoutAlpha_ = titleLogo_t_;
 			if (titleLogo_t_ >= 1.0f) {
 				titleLogo_t_ = 1.0f;
 				isEnd_titleLogoGimmick = true;
@@ -672,24 +739,39 @@ void TitleScene::TitleLogoGimmick() {
 
 void TitleScene::TitleGimmick() { 
 	//
-	if (titleGimmickTimer_ >= 0.0f) {
-		isTitleLogoGimmick = true;
-	} 
-	//
-	if (titleGimmickTimer_ >= 0.1f) {
-		isStartButtonGimmick = true;
-	}
-	//
-	if (titleGimmickTimer_ >= 0.2f) {
-		isEndButtonGimmick = true;
-	}
+	if (!isTitleGimmick_) {
+		if (blackoutAlpha_ > 0.0f) {
+			blackoutAlpha_ -= blackoutAlpha_offset_;
+		}
+		//
+		else if (blackoutAlpha_ <= 0.0f) {
+			blackoutAlpha_ = 0.0f;
+		}
 
-	if (titleGimmickTimer_ >= 1.0f) {
-		titleGimmickTimer_ = 1.0f;
+		if (titleGimmickTimer_ >= 0.0f) {
+			isTitleLogoGimmick = true;
+		}
+		//
+		if (titleGimmickTimer_ >= 0.1f) {
+			isStartButtonGimmick = true;
+		}
+		//
+		if (titleGimmickTimer_ >= 0.2f) {
+			isEndButtonGimmick = true;
+		}
+
+		if (titleGimmickTimer_ >= 1.0f) {
+			titleGimmickTimer_ = 1.0f;
+			isTitleGimmick_ = true;
+		}
+		//
+		else if (titleGimmickTimer_ < 1.0f) {
+			titleGimmickTimer_ += 0.01f;
+		}
 	}
 	//
-	else if (titleGimmickTimer_ < 1.0f) {
-		titleGimmickTimer_ += 0.01f;
+	else if (isTitleGimmick_) {
+		
 	}
 }
 

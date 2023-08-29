@@ -197,6 +197,19 @@ private: // メンバ変数
 	//
 	float titleGimmickTimer_ = 0.0f;
 
+	
+	// 黒画面
+	std::unique_ptr<Sprite> blackout_ = nullptr;
+	// 黒画面のテクスチャ
+	uint32_t blackoutTex_;
+	float blackoutAlpha_ = 0.0f;
+	float blackoutAlpha_offset_ = 0.1f;
 
 
+	uint32_t BGMHandle_ = 0u;
+	float bolume = 0.0f;
+
+	uint32_t selectSEHandle_ = 0u;
+	bool isStartSelect = false;
+	bool isEndSelect = false;
 };

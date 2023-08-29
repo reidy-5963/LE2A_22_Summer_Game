@@ -26,7 +26,9 @@ Player::~Player() {
 /// 初期化処理
 /// </summary>
 /// <param name="models">モデルデータ</param>
-void Player::Initialize(const std::vector<Model*>& models) { 
+void Player::Initialize(const std::vector<Model*>& models) {
+	assert(models_.size() != kModelNo);
+
 	isClear_ = false;
 	isDead_ = false;
 
@@ -549,6 +551,8 @@ void Player::DrawUI() {
 	//
 	sprite_2dReticle_->Draw();
 	p_heart_->Draw();
+
+	
 }
 
 /// <summary>

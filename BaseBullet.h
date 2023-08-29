@@ -7,47 +7,48 @@
 class BaseBullet {
 public:
 	/// <summary>
-	///
+	/// 初期化処理
 	/// </summary>
-	/// <param name="models"></param>
-	/// <param name="position"></param>
-	/// <param name="velosity"></param>
+	/// <param name="models">モデル動的配列</param>
+	/// <param name="position">位置</param>
+	/// <param name="velosity">打ち出す向き&強さ</param>
 	void Initialize(
 	    const std::vector<Model*>& models, const Vector3& position);
 
 	/// <summary>
-	///
+	/// 更新処理
 	/// </summary>
 	virtual void Update();
 
 	/// <summary>
-	///
+	/// 描画処理
 	/// </summary>
 	virtual void Draw(const ViewProjection& viewProjection);
 
 	/// <summary>
-	///
+	/// もし当たっていたら
 	/// </summary>
 	virtual void OnCollision();
+
+	/// <summary>
+	/// グローバル変数の初期化処理
+	/// </summary>
+	virtual void InitializeGlobalVariavles();
 
 	/// <summary>
 	/// グローバル変数の取得
 	/// </summary>
 	virtual void ApplyGlobalVariavles();
 
-	/// <summary>
-	///
-	/// </summary>
-	virtual void InitializeGlobalVariavles();
 
 	/// <summary>
-	///
+	/// 弾の有効フラグ
 	/// </summary>
 	/// <returns></returns>
 	bool IsDead() const { return isDead_; }
 
 	/// <summary>
-	///
+	/// ワールド座標の取得
 	/// </summary>
 	/// <returns></returns>
 	Vector3 GetWorldPosition();
@@ -59,7 +60,7 @@ public:
 	float GetRadius() { return radius_; }
 
 	/// <summary>
-	/// 
+	/// ダメージ数の取得
 	/// </summary>
 	/// <returns></returns>
 	float GetDamage() { return damage_; }

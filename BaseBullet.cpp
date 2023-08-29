@@ -4,6 +4,7 @@
 
 void BaseBullet::Initialize(
     const std::vector<Model*>& models, const Vector3& position) {
+	assert(models_.size() != 1);
 
 	models_ = models;
 	worldTransform_.Initialize();

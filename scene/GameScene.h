@@ -153,6 +153,17 @@ private: // メンバ変数
 	// 敵ポップ間のタイマー
 	int32_t waitTimer_ = 0;
 
+	std::unique_ptr<Sprite> blackout_ = nullptr;
+	uint32_t blackoutTex_ = 0u;
+	float blackoutAlpha_ = 0.0f;
+	float blackoutAlpha_offset_ = 0.1f;
+
+	std::unique_ptr<Sprite> damageEffect_ = nullptr;
+	uint32_t damageEffectTex_ = 0u;
+	float damageEffectAlpha_ = 0.0f;
+	float damageEffectAlpha_offset_ = 0.01f;
+
+
 #pragma endregion
 	// ポーズモードフラグ
 	bool isPoseMode_ = false;
@@ -165,4 +176,6 @@ private: // メンバ変数
 	
 	// 敵ポップ停止フラグ
 	bool isWait_ = false;
+
+	bool isStart_ = false;
 };

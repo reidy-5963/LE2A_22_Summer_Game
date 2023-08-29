@@ -148,6 +148,10 @@ public: // メンバ関数
 
 	void SetIsFps(bool isFps) { isFps_ = isFps; }
 
+	float GetHP() { return hp_; }
+
+	float GetSetHP() { return setHp_; }
+
 private: // メンバ変数
 	// 入力関係
 	Input* input_ = nullptr;

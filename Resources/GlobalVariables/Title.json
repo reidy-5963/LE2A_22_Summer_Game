@@ -1,9 +1,5 @@
 {
     "Title": {
-        "End Button Pos": [
-            640.0,
-            570.0
-        ],
         "End Button Pos In E": [
             640.0,
             570.0
@@ -16,53 +12,45 @@
             820.0,
             570.0
         ],
-        "End Button Pos Out S": [
-            640.0,
-            570.0
-        ],
         "End Button Pos Root E": [
             640.0,
             575.0
         ],
-        "End Button Pos Root S": [
-            640.0,
-            570.0
-        ],
-        "Start Button Pos E": [
-            640.0,
-            460.0
-        ],
         "Start Button Pos In E": [
             640.0,
-            460.0
+            420.0
         ],
         "Start Button Pos In S": [
             460.0,
-            460.0
+            420.0
         ],
         "Start Button Pos Out E": [
             820.0,
-            460.0
-        ],
-        "Start Button Pos Out S": [
-            640.0,
-            460.0
+            420.0
         ],
         "Start Button Pos Root E": [
             640.0,
-            465.0
-        ],
-        "Start Button Pos Root S": [
-            640.0,
-            460.0
-        ],
-        "Start Button Pos S": [
-            460.0,
-            460.0
+            410.0
         ],
         "Title Logo Pos": [
+            0.0,
+            0.0
+        ],
+        "Title_Logo_In_E": [
             640.0,
             200.0
+        ],
+        "Title_Logo_In_S": [
+            640.0,
+            140.0
+        ],
+        "Title_Logo_Out_E": [
+            640.0,
+            260.0
+        ],
+        "Title_Logo_Root_E": [
+            640.0,
+            185.0
         ],
         "b_in_t_offset": 0.10000000149011612,
         "b_out_t_offset": 0.10000000149011612,

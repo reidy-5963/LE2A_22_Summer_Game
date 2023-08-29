@@ -101,28 +101,51 @@ void GameScene::Initialize() {
 #pragma endregion
 
 #pragma region 敵
-	//enemy_ = std::make_unique<Enemy>();
-	// プレイヤーのモデルの生成
+	// enemy_ = std::make_unique<Enemy>();
+	//  プレイヤーのモデルの生成
 	e_body_model_.reset(Model::CreateFromOBJ("Enemy_Body", true));
 	e_head_model_.reset(Model::CreateFromOBJ("Enemy_Head", true));
 	e_l_arm_model_.reset(Model::CreateFromOBJ("Enemy_L_Arm", true));
 	e_r_arm_model_.reset(Model::CreateFromOBJ("Enemy_R_Arm", true));
 	// プレイヤーのモデルを配列に
 	enemyModels_ = {
-		e_body_model_.get(),
+	    e_body_model_.get(),
 	    e_head_model_.get(),
 	    e_l_arm_model_.get(),
 	    e_r_arm_model_.get(),
 	};
 	// プレイヤーの初期化処理
-	//enemy_->Initialize(enemyModels);
-	//enemy_->SetPlayer(player_.get());
+	// enemy_->Initialize(enemyModels);
+	// enemy_->SetPlayer(player_.get());
 
 	e_bullet_model_.reset((Model::CreateFromOBJ("Bullet", true)));
 	e_bullet_models = {e_bullet_model_.get()};
 	LoadEnemyPopData();
 
 #pragma endregion
+
+#pragma region 黒画面
+	// 各Sprite用のテクスチャの読み込み
+	blackoutTex_ = TextureManager::Load("BlackOut.png");
+
+	// [始める]の初期化処理
+	blackout_.reset(Sprite::Create(
+	    blackoutTex_, {float(WinApp::kWindowWidth / 2), float(WinApp::kWindowHeight / 2)},
+	    {1.0f, 1.0f, 1.0f, 1.0f}, {0.5f, 0.5f}));
+	blackoutAlpha_ = 1.0f;
+#pragma endregion
+
+#pragma region ダメージエフェクト
+	// 各Sprite用のテクスチャの読み込み
+	damageEffectTex_ = TextureManager::Load("Damage_Scene.png");
+
+	// [始める]の初期化処理
+	damageEffect_.reset(Sprite::Create(
+	    damageEffectTex_, {float(WinApp::kWindowWidth / 2), float(WinApp::kWindowHeight / 2)},
+	    {1.0f, 1.0f, 1.0f, 1.0f}, {0.5f, 0.5f}));
+	damageEffectAlpha_ = 0.0f;
+#pragma endregion
+	isStart_ = false;
 }
 
 /// <summary>
@@ -172,9 +195,24 @@ void GameScene::Update() {
 		// プレイヤーの更新処理
 		player_->SetIsFps(followCamera_->IsFps());
 		player_->Update();
-		UpdateEnemyPopCommands();
+
+		if (isStart_) {
+			UpdateEnemyPopCommands();
+		}
+		else if (!isStart_) {
+			if (blackoutAlpha_ <= 0.0f) {
+				isStart_ = true;
+				blackoutAlpha_ = 0.0f;
+			}
+			//
+			else if (blackoutAlpha_ > 0.0f) {
+				blackoutAlpha_ -= blackoutAlpha_offset_;
+			}
+		}
+
+
 		//
-		//enemy_->Update();
+		// enemy_->Update();
 		enemys_.remove_if([](Enemy* enemy) {
 			if (enemy->IsDead()) {
 				delete enemy;
@@ -203,7 +241,9 @@ void GameScene::Update() {
 		CheckAllCollisions();
 		followCamera_->SetIsDamage(player_->IsDamage());
 		followCamera_->SetRotation(player_->GetWorldTransform().rotation_);
-		
+
+		damageEffectAlpha_ = (1.0f - (player_->GetHP() / player_->GetSetHP()));
+
 		if (player_->IsDead()) {
 			scenedNo_ = OVER_S;
 		}
@@ -211,7 +251,7 @@ void GameScene::Update() {
 			scenedNo_ = CLEAR_S;
 		}
 
-	} 
+	}
 	// もしポーズ中なら
 	else if (isPoseMode_) {
 		if (input_->GetJoystickState(0, joyState)) {
@@ -248,8 +288,10 @@ void GameScene::Update() {
 		if (input_->TriggerKey(DIK_3)) {
 			scenedNo_ = OVER_S;
 		}
-
 	}
+
+	blackout_->SetColor({1.0f, 1.0f, 1.0f, blackoutAlpha_});
+	damageEffect_->SetColor({1.0f, 1.0f, 1.0f, damageEffectAlpha_});
 }
 
 /// <summary>
@@ -308,7 +350,9 @@ void GameScene::Draw() {
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
 	player_->DrawUI();
+	damageEffect_->Draw();
 
+	blackout_->Draw();
 	// スプライト描画後処理
 	Sprite::PostDraw();
 
@@ -358,12 +402,12 @@ void GameScene::CheckAllCollisions() {
 		float bulletRad = player_->GetRadius();
 		float enemyRad = enemy->GetRadius();
 		if (Judge <= (bulletRad + enemyRad) * (bulletRad + enemyRad)) {
-			//player_->OnCollision(enemy->GetDamage());
+			// player_->OnCollision(enemy->GetDamage());
 		}
 	}
 #pragma endregion
 #pragma region 敵弾とプレイヤー
-	for (EnemyBullet* enemyBullet: enemyBullets_) {
+	for (EnemyBullet* enemyBullet : enemyBullets_) {
 		posB = player_->GetWorldPosition();
 		posB.y = player_->GetWorldPosition().y + 2.5f;
 		posA = enemyBullet->GetWorldPosition();
@@ -461,8 +505,7 @@ void GameScene::UpdateEnemyPopCommands() {
 			float z = (float)std::atof(word.c_str());
 
 			EnemyIni(enemyModels_, Vector3(x, y, z), false);
-		} 
-		else if (word.find("WAIT") == 0) {
+		} else if (word.find("WAIT") == 0) {
 			getline(line_stream, word, ',');
 
 			int32_t waitTime = atoi(word.c_str());
@@ -470,7 +513,7 @@ void GameScene::UpdateEnemyPopCommands() {
 			isWait_ = true;
 			waitTimer_ = waitTime;
 			break;
-		} 
+		}
 
 		else if (word.find("ENDPOP")) {
 			isEnemyEnd_ = true;
@@ -486,6 +529,5 @@ void GameScene::UpdateEnemyPopCommands() {
 
 			EnemyIni(enemyModels_, Vector3(x, y, z), true);
 		}
-
 	}
 }

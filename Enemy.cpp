@@ -21,7 +21,8 @@ Enemy::~Enemy() {}
 /// </summary>
 /// <param name="models"></param>
 void Enemy::Initialize(const std::vector<Model*>& models, const Vector3 position, bool isLast) {
-	
+	assert(models_.size() != kModelNo);
+
 	// ベース部分の初期化処理
 	BaseCharacter::Initialize(models);
 
