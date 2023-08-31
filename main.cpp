@@ -21,7 +21,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// ゲームウィンドウの作成
 	win = WinApp::GetInstance();
-	win->CreateGameWindow();
+	win->CreateGameWindow(L"LE2A_22_ワタナベ_レイヤ_己守り");
 
 	// DirectX初期化処理
 	dxCommon = DirectXCommon::GetInstance();
@@ -77,8 +77,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		imguiManager->Begin();
 		// 入力関連の毎フレーム処理
 		input->Update();
+
+#ifdef _DEBUG
 		// グローバル変数の更新処理
-		GlobalVariables::GetInstance()->Update();
+		GlobalVariables::GetInstance()->Update();		
+#endif
 		// ゲームシーンの毎フレーム処理
 		Scene->Update();
 		// 軸表示の更新

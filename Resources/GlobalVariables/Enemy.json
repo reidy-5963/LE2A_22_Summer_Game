@@ -23,12 +23,12 @@
             0.0
         ],
         "bulletSpeed": 1.0,
-        "bulletTime": 15,
+        "bulletTime": 30,
         "damagingAmplitude_": 3.0,
         "damagingPeriod_": 25.0,
         "floatingAmplitude_": 0.07000000029802322,
         "floatingPeriod_": 60.0,
-        "moveSpeed": 0.03999999910593033,
+        "moveSpeed": 0.09000000357627869,
         "radius": 3.0
     }
 }

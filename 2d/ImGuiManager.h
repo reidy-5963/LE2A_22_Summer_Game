@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#ifdef _DEBUG
+//#ifdef _DEBUG
 #include <d3d12.h>
 #include <imgui.h>
 #include <wrl.h>
-#endif
+//#endif
 
 class WinApp;
 class DirectXCommon;
@@ -38,12 +38,12 @@ public:
 	void Draw();
 
 private:
-#ifdef _DEBUG
-	// DirectX基盤インスタンス（借りてくる）
+	// #ifdef _DEBUG
+	//  DirectX基盤インスタンス（借りてくる）
 	DirectXCommon* dxCommon_ = nullptr;
 	// SRV用ヒープ
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvHeap_;
-#endif
+	// #endif
 private:
 	ImGuiManager() = default;
 	~ImGuiManager() = default;

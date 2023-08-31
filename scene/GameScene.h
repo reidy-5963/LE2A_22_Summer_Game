@@ -15,6 +15,28 @@
 /// ゲームシーン
 /// </summary>
 class GameScene : public BaseScene{
+public:
+	enum joyStateSelectButton {
+		BACKPLAY,
+		BACKTITLE,
+	};
+
+	enum Tutorial {
+		Base,
+		Joy_Base,
+		Mouse_Base,
+		Joy_Left,
+		Joy_Right,
+		Joy_RB,
+		Joy_Start,
+		Mouse_W,
+		Mouse_A,
+		Mouse_S,
+		Mouse_D,
+		Mouse_ESC,
+		Mouse_Left,
+
+	};
 
 public: // メンバ関数
 	/// <summary>
@@ -41,6 +63,16 @@ public: // メンバ関数
 	/// 描画処理
 	/// </summary>
 	void Draw();
+
+	/// <summary>
+	/// グローバル変数の初期化処理
+	/// </summary>
+	void InitializeGlobalVariavles();
+
+	/// <summary>
+	/// グローバル変数の取得
+	/// </summary>
+	void ApplyGlobalVariavles();
 
 	/// <summary>
 	/// 全ての当たり判定処理
@@ -75,8 +107,19 @@ public: // メンバ関数
 	/// 敵ポップデータの更新処理
 	/// </summary>
 	void UpdateEnemyPopCommands();
+	bool ButtonToCurSor(Vector2 buttonPos, Vector2 buttonSize);
 
-private: // メンバ変数
+	void KeyMouse_ButtonUpdate(
+	    Vector2 buttonPos, Vector2 buttonSize, bool& isSelect, bool& whatDO, Sprite* sprite,
+	    uint32_t texture[2]);
+
+	void JoyStateUpdate();
+	void JoyState_ButtonUpdate(
+	    int selectState, Sprite* start, Sprite* end, uint32_t startTex, uint32_t endTex,
+	    bool& whatDO);
+
+private
+	    : // メンバ変数
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
@@ -117,8 +160,10 @@ private: // メンバ変数
 	// レティクルのテクスチャ
 	uint32_t reticleTex_;
 	// 体力のテクスチャ
-	uint32_t heartTex_;
-
+	uint32_t hp_root_tex_ = 0u;
+	uint32_t hp_gauge_root_tex_ = 0u;
+	uint32_t hp_out_tex_ = 0u;
+	uint32_t hp_gauge_out_tex_ = 0u;
 #pragma endregion
 
 #pragma region 追従カメラ
@@ -158,15 +203,12 @@ private: // メンバ変数
 	float blackoutAlpha_ = 0.0f;
 	float blackoutAlpha_offset_ = 0.1f;
 
-	std::unique_ptr<Sprite> damageEffect_ = nullptr;
 	uint32_t damageEffectTex_ = 0u;
-	float damageEffectAlpha_ = 0.0f;
-	float damageEffectAlpha_offset_ = 0.01f;
 
 
 #pragma endregion
 	// ポーズモードフラグ
-	bool isPoseMode_ = false;
+	bool isNotPose_ = false;
 	
 	// マウス操作
 	bool controlMouse = true;
@@ -178,4 +220,52 @@ private: // メンバ変数
 	bool isWait_ = false;
 
 	bool isStart_ = false;
+	int i = 0;
+
+	float bolume = 0.5f;
+	uint32_t selectSEHandle_ = 0u;
+	uint32_t BGMHandle_ = 0u;
+#pragma region menu
+	// メニュー[タイトルに戻る]
+	std::unique_ptr<Sprite> menu_backTitle_ = nullptr;
+	
+	// メニュー[タイトルに戻る]
+	uint32_t menu_backTitle_Tex_[2] = {0u};
+	
+	// メニュー[タイトルに戻る]の位置
+	Vector2 menu_backTitle_pos_;
+
+	// 
+	bool isSelect_backTitle_ = false;
+
+	std::unique_ptr<Sprite> menu_backPlay_ = nullptr;
+	uint32_t menu_backPlay_Tex_[2] = {0u};
+	Vector2 menu_backPlay_pos_;
+	bool isSelect_backPlay_ = false;
+
+
+	POINT mousePos_;
+	bool isTitle_ = false;
+	
+	// 選択時間の設定値
+	int timerSet_ = 20;
+	// コントローラー時の選択時間
+	int timer_ = timerSet_;
+	int selectButton = 0;
+	// もし選択していたらのフラグ
+	bool isSelectButton_ = false;
+
+#pragma endregion
+
+	std::unique_ptr<Sprite> tutorial_[13];
+	Vector2 tutorialPos_;
+
+	const int tutorialNum = 13;
+	uint32_t tutorial_tex_[13];
+
+	bool isAnimation_ = false;
+	int setTime_tutAnime_ = 60;
+	int tutAnime_timer_ = setTime_tutAnime_;
+		
 };
+
