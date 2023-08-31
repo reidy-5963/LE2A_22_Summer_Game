@@ -6,8 +6,7 @@
 #include "PrimitiveDrawer.h"
 #include "TextureManager.h"
 #include "WinApp.h"
-
-
+#include "GlobalVariables.h"
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -22,7 +21,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// ゲームウィンドウの作成
 	win = WinApp::GetInstance();
-	win->CreateGameWindow();
+	win->CreateGameWindow(L"LE2A_22_ワタナベ_レイヤ_己守り");
 
 	// DirectX初期化処理
 	dxCommon = DirectXCommon::GetInstance();
@@ -55,9 +54,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	axisIndicator = AxisIndicator::GetInstance();
 	axisIndicator->Initialize();
 
+	// 
 	primitiveDrawer = PrimitiveDrawer::GetInstance();
 	primitiveDrawer->Initialize();
 #pragma endregion
+	// グローバル変数の読み込み
+	GlobalVariables::GetInstance()->LoadFiles();
+
 
 	// ゲームシーンの初期化
 	Scene = SceneManager::GetInstance();
@@ -74,6 +77,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		imguiManager->Begin();
 		// 入力関連の毎フレーム処理
 		input->Update();
+
+#ifdef _DEBUG
+		// グローバル変数の更新処理
+		GlobalVariables::GetInstance()->Update();		
+#endif
 		// ゲームシーンの毎フレーム処理
 		Scene->Update();
 		// 軸表示の更新
@@ -93,6 +101,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		imguiManager->Draw();
 		// 描画終了
 		dxCommon->PostDraw();
+
+		// もしゲーム終了を受け取ったら
+		if (Scene->IsEnd()) {
+			break;
+		}
 	}
 
 	// 各種解放

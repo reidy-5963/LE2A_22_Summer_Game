@@ -1,0 +1,81 @@
+{
+    "CLEAR": {
+        "End Button Pos In E": [
+            640.0,
+            520.0
+        ],
+        "End Button Pos In S": [
+            580.0,
+            520.0
+        ],
+        "End Button Pos Out E": [
+            700.0,
+            520.0
+        ],
+        "End Button Pos Out S": [
+            640.0,
+            520.0
+        ],
+        "End Button Pos Root E": [
+            640.0,
+            522.0
+        ],
+        "End Button Pos Root S": [
+            640.0,
+            520.0
+        ],
+        "b_in_t_offset": 0.10000000149011612,
+        "b_out_t_offset": 0.10000000149011612,
+        "b_root_t_offset": 0.10000000149011612,
+        "backTitle_in_E_pos_": [
+            640.0,
+            400.0
+        ],
+        "backTitle_in_S_pos_": [
+            580.0,
+            400.0
+        ],
+        "backTitle_out_E_pos_": [
+            700.0,
+            400.0
+        ],
+        "backTitle_out_S_pos_": [
+            640.0,
+            400.0
+        ],
+        "backTitle_root_E_pos_": [
+            640.0,
+            402.0
+        ],
+        "backTitle_root_S_pos_": [
+            640.0,
+            400.0
+        ],
+        "bolume": 0.30000001192092896,
+        "logo_in_E_pos_": [
+            640.0,
+            155.0
+        ],
+        "logo_in_S_pos_": [
+            580.0,
+            155.0
+        ],
+        "logo_out_E_pos_": [
+            700.0,
+            155.0
+        ],
+        "logo_out_S_pos_": [
+            640.0,
+            155.0
+        ],
+        "logo_root_E_pos_": [
+            640.0,
+            135.0
+        ],
+        "logo_root_S_pos_": [
+            640.0,
+            155.0
+        ],
+        "timer_": 20
+    }
+}

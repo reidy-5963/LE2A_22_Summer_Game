@@ -1,0 +1,6 @@
+{
+    "P_Bullet": {
+        "Damage": 35.0,
+        "radius": 1.0
+    }
+}

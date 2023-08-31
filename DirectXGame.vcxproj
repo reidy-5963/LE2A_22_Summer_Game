@@ -63,7 +63,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)base;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)math;C:\Users\reiya\OneDrive\デスクトップ\kamata\KamataEngine20230707\External\nlohmann;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)base;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)math;C:\Users\reiya\OneDrive\デスクトップ\kamata\KamataEngine20230707\External\nlohmann;$(ProjectDir)Character;$(ProjectDir)Camera;$(ProjectDir)World;$(ProjectDir)Bullet;C:\Users\reiya\OneDrive\デスクトップ\kamata\KamataEngine20230707\External\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -86,7 +86,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)base;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)math;C:\Users\reiya\OneDrive\デスクトップ\kamata\KamataEngine20230707\External\nlohmann;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)2d;$(ProjectDir)3d;$(ProjectDir)audio;$(ProjectDir)base;$(ProjectDir)input;$(ProjectDir)scene;$(ProjectDir)math;C:\Users\reiya\OneDrive\デスクトップ\kamata\KamataEngine20230707\External\nlohmann;$(ProjectDir)Character;$(ProjectDir)Camera;$(ProjectDir)World;$(ProjectDir)Bullet;C:\Users\reiya\OneDrive\デスクトップ\kamata\KamataEngine20230707\External\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <Optimization>MinSpace</Optimization>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -107,23 +107,27 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="2d\ImGuiManager.cpp" />
-    <ClCompile Include="BaseCharacter.cpp" />
-    <ClCompile Include="BaseScene.cpp" />
+    <ClCompile Include="3d\WorldTransformEx.cpp" />
     <ClCompile Include="base\DirectXCommon.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
-    <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="FollowCamera.cpp" />
+    <ClCompile Include="Bullet\BaseBullet.cpp" />
+    <ClCompile Include="Bullet\EnemyBullet.cpp" />
+    <ClCompile Include="Bullet\PlayerBullet.cpp" />
+    <ClCompile Include="Camera\FollowCamera.cpp" />
+    <ClCompile Include="Character\BaseCharacter.cpp" />
+    <ClCompile Include="Character\Enemy.cpp" />
+    <ClCompile Include="Character\Player.cpp" />
     <ClCompile Include="GlobalVariables.cpp" />
-    <ClCompile Include="Ground.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MyMath.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PlayerBullet.cpp" />
-    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="math\MyMath.cpp" />
+    <ClCompile Include="scene\BaseScene.cpp" />
+    <ClCompile Include="scene\ClearScene.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
-    <ClCompile Include="skydome.cpp" />
-    <ClCompile Include="TitleScene.cpp" />
-    <ClCompile Include="WorldTransformEx.cpp" />
+    <ClCompile Include="scene\OverScene.cpp" />
+    <ClCompile Include="scene\SceneManager.cpp" />
+    <ClCompile Include="scene\TitleScene.cpp" />
+    <ClCompile Include="World\Ground.cpp" />
+    <ClCompile Include="World\skydome.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2d\ImGuiManager.h" />
@@ -144,30 +148,34 @@
     <ClInclude Include="3d\ViewProjection.h" />
     <ClInclude Include="3d\WorldTransform.h" />
     <ClInclude Include="audio\Audio.h" />
-    <ClInclude Include="BaseCharacter.h" />
-    <ClInclude Include="BaseScene.h" />
     <ClInclude Include="base\DirectXCommon.h" />
     <ClInclude Include="base\SafeDelete.h" />
     <ClInclude Include="base\StringUtility.h" />
     <ClInclude Include="base\TextureManager.h" />
     <ClInclude Include="base\WinApp.h" />
-    <ClInclude Include="Enemy.h" />
-    <ClInclude Include="FollowCamera.h" />
+    <ClInclude Include="Bullet\BaseBullet.h" />
+    <ClInclude Include="Bullet\EnemyBullet.h" />
+    <ClInclude Include="Bullet\PlayerBullet.h" />
+    <ClInclude Include="Camera\FollowCamera.h" />
+    <ClInclude Include="Character\BaseCharacter.h" />
+    <ClInclude Include="Character\Enemy.h" />
+    <ClInclude Include="Character\Player.h" />
     <ClInclude Include="GlobalVariables.h" />
-    <ClInclude Include="Ground.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="math\Matrix4x4.h" />
+    <ClInclude Include="math\MyMath.h" />
     <ClInclude Include="math\Vector2.h" />
     <ClInclude Include="math\Vector3.h" />
     <ClInclude Include="math\Vector4.h" />
-    <ClInclude Include="MyMath.h" />
     <ClInclude Include="MyStruct.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="PlayerBullet.h" />
-    <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="scene\BaseScene.h" />
+    <ClInclude Include="scene\ClearScene.h" />
     <ClInclude Include="scene\GameScene.h" />
-    <ClInclude Include="skydome.h" />
-    <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="scene\OverScene.h" />
+    <ClInclude Include="scene\SceneManager.h" />
+    <ClInclude Include="scene\TitleScene.h" />
+    <ClInclude Include="World\Ground.h" />
+    <ClInclude Include="World\skydome.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\TerrainPS.hlsl">

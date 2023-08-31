@@ -1,0 +1,34 @@
+{
+    "Enemy": {
+        "ArmL Translation": [
+            -1.0,
+            3.200000047683716,
+            0.0
+        ],
+        "ArmR Translation": [
+            1.0,
+            3.200000047683716,
+            0.0
+        ],
+        "Body Translation": [
+            0.0,
+            -0.4000000059604645,
+            0.0
+        ],
+        "Damage": 1.0,
+        "HP": 200.0,
+        "Head Translation": [
+            0.0,
+            3.799999952316284,
+            0.0
+        ],
+        "bulletSpeed": 1.0,
+        "bulletTime": 30,
+        "damagingAmplitude_": 3.0,
+        "damagingPeriod_": 25.0,
+        "floatingAmplitude_": 0.07000000029802322,
+        "floatingPeriod_": 60.0,
+        "moveSpeed": 0.09000000357627869,
+        "radius": 3.0
+    }
+}

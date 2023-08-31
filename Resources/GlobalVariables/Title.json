@@ -1,0 +1,85 @@
+{
+    "Title": {
+        "End Button Pos In E": [
+            640.0,
+            570.0
+        ],
+        "End Button Pos In S": [
+            460.0,
+            570.0
+        ],
+        "End Button Pos Out E": [
+            820.0,
+            570.0
+        ],
+        "End Button Pos Out S": [
+            640.0,
+            570.0
+        ],
+        "End Button Pos Root E": [
+            640.0,
+            600.0
+        ],
+        "End Button Pos Root S": [
+            640.0,
+            595.0
+        ],
+        "Start Button Pos In E": [
+            640.0,
+            420.0
+        ],
+        "Start Button Pos In S": [
+            460.0,
+            420.0
+        ],
+        "Start Button Pos Out E": [
+            820.0,
+            420.0
+        ],
+        "Start Button Pos Out S": [
+            640.0,
+            420.0
+        ],
+        "Start Button Pos Root E": [
+            640.0,
+            415.0
+        ],
+        "Start Button Pos Root S": [
+            640.0,
+            410.0
+        ],
+        "Title Logo Pos": [
+            640.0,
+            0.0
+        ],
+        "Title_Logo_In_E": [
+            640.0,
+            200.0
+        ],
+        "Title_Logo_In_S": [
+            580.0,
+            140.0
+        ],
+        "Title_Logo_Out_E": [
+            700.0,
+            260.0
+        ],
+        "Title_Logo_Out_S": [
+            640.0,
+            260.0
+        ],
+        "Title_Logo_Root_E": [
+            640.0,
+            185.0
+        ],
+        "Title_Logo_Root_S": [
+            640.0,
+            200.0
+        ],
+        "b_in_t_offset": 0.10000000149011612,
+        "b_out_t_offset": 0.5,
+        "b_root_t_offset": 0.009999999776482582,
+        "bolume": 0.20000000298023224,
+        "timer_": 20
+    }
+}

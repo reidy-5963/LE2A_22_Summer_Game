@@ -73,6 +73,12 @@
     <Filter Include="ヘッダー ファイル\カメラ">
       <UniqueIdentifier>{fb8497d9-0e7c-4390-b30b-953df1def219}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\弾系">
+      <UniqueIdentifier>{08a92aa9-b60f-412c-a57b-34c6cb71a7f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\弾系">
+      <UniqueIdentifier>{8d4802eb-d920-4fd9-8259-e3ee3d894fd0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -90,44 +96,56 @@
     <ClCompile Include="2d\ImGuiManager.cpp">
       <Filter>ソース ファイル\2d</Filter>
     </ClCompile>
-    <ClCompile Include="BaseCharacter.cpp">
-      <Filter>ソース ファイル\キャラオブジェクト</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>ソース ファイル\キャラオブジェクト</Filter>
-    </ClCompile>
-    <ClCompile Include="Ground.cpp">
-      <Filter>ソース ファイル\世界</Filter>
-    </ClCompile>
-    <ClCompile Include="skydome.cpp">
-      <Filter>ソース ファイル\世界</Filter>
-    </ClCompile>
-    <ClCompile Include="WorldTransformEx.cpp">
-      <Filter>ソース ファイル\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="FollowCamera.cpp">
-      <Filter>ソース ファイル\カメラ</Filter>
-    </ClCompile>
-    <ClCompile Include="MyMath.cpp">
-      <Filter>ソース ファイル\math</Filter>
-    </ClCompile>
     <ClCompile Include="GlobalVariables.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="BaseScene.cpp">
+    <ClCompile Include="scene\BaseScene.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
+    <ClCompile Include="scene\SceneManager.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
-    <ClCompile Include="TitleScene.cpp">
+    <ClCompile Include="scene\TitleScene.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerBullet.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Camera\FollowCamera.cpp">
+      <Filter>ソース ファイル\カメラ</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="3d\WorldTransformEx.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="math\MyMath.cpp">
+      <Filter>ソース ファイル\math</Filter>
+    </ClCompile>
+    <ClCompile Include="Character\BaseCharacter.cpp">
+      <Filter>ソース ファイル\キャラオブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="Character\Enemy.cpp">
+      <Filter>ソース ファイル\キャラオブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="Character\Player.cpp">
+      <Filter>ソース ファイル\キャラオブジェクト</Filter>
+    </ClCompile>
+    <ClCompile Include="World\Ground.cpp">
+      <Filter>ソース ファイル\世界</Filter>
+    </ClCompile>
+    <ClCompile Include="World\skydome.cpp">
+      <Filter>ソース ファイル\世界</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet\BaseBullet.cpp">
+      <Filter>ソース ファイル\弾系</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet\EnemyBullet.cpp">
+      <Filter>ソース ファイル\弾系</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet\PlayerBullet.cpp">
+      <Filter>ソース ファイル\弾系</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\ClearScene.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\OverScene.cpp">
+      <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -218,44 +236,56 @@
     <ClInclude Include="base\StringUtility.h">
       <Filter>ヘッダー ファイル\base</Filter>
     </ClInclude>
-    <ClInclude Include="skydome.h">
-      <Filter>ヘッダー ファイル\世界</Filter>
-    </ClInclude>
-    <ClInclude Include="Ground.h">
-      <Filter>ヘッダー ファイル\世界</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>ヘッダー ファイル\キャラオブジェクト</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseCharacter.h">
-      <Filter>ヘッダー ファイル\キャラオブジェクト</Filter>
-    </ClInclude>
-    <ClInclude Include="MyMath.h">
-      <Filter>ヘッダー ファイル\math</Filter>
-    </ClInclude>
     <ClInclude Include="MyStruct.h">
       <Filter>ヘッダー ファイル\math</Filter>
-    </ClInclude>
-    <ClInclude Include="FollowCamera.h">
-      <Filter>ヘッダー ファイル\カメラ</Filter>
     </ClInclude>
     <ClInclude Include="GlobalVariables.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="BaseScene.h">
+    <ClInclude Include="scene\BaseScene.h">
       <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
-    <ClInclude Include="SceneManager.h">
+    <ClInclude Include="scene\OverScene.h">
       <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
-    <ClInclude Include="TitleScene.h">
+    <ClInclude Include="scene\SceneManager.h">
       <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerBullet.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="scene\TitleScene.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Camera\FollowCamera.h">
+      <Filter>ヘッダー ファイル\カメラ</Filter>
+    </ClInclude>
+    <ClInclude Include="math\MyMath.h">
+      <Filter>ヘッダー ファイル\math</Filter>
+    </ClInclude>
+    <ClInclude Include="Character\BaseCharacter.h">
+      <Filter>ヘッダー ファイル\キャラオブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="Character\Enemy.h">
+      <Filter>ヘッダー ファイル\キャラオブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="Character\Player.h">
+      <Filter>ヘッダー ファイル\キャラオブジェクト</Filter>
+    </ClInclude>
+    <ClInclude Include="World\Ground.h">
+      <Filter>ヘッダー ファイル\世界</Filter>
+    </ClInclude>
+    <ClInclude Include="World\skydome.h">
+      <Filter>ヘッダー ファイル\世界</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet\EnemyBullet.h">
+      <Filter>ヘッダー ファイル\弾系</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet\PlayerBullet.h">
+      <Filter>ヘッダー ファイル\弾系</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet\BaseBullet.h">
+      <Filter>ヘッダー ファイル\弾系</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\ClearScene.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

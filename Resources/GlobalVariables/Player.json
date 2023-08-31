@@ -1,0 +1,51 @@
+{
+    "Player": {
+        "ArmL Rotation": [
+            4.800000190734863,
+            0.5,
+            0.0
+        ],
+        "ArmL Translation": [
+            -1.0,
+            4.0,
+            0.0
+        ],
+        "ArmR Rotation": [
+            4.800000190734863,
+            -0.5,
+            0.0
+        ],
+        "ArmR Translation": [
+            1.0,
+            4.0,
+            0.0
+        ],
+        "Body Translation": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "HP": 200.0,
+        "Head Translation": [
+            0.0,
+            3.9000000953674316,
+            0.0
+        ],
+        "armAmplitude_": 0.15000000596046448,
+        "armPeriod_": 40.0,
+        "bulletSpeed": 10.937999725341797,
+        "bulletTime": 15,
+        "floatingAmplitude_": 0.07000000029802322,
+        "floatingPeriod_": 50.0,
+        "hp_gauge_pos_": [
+            0.0,
+            0.0
+        ],
+        "hp_pos_": [
+            32.0,
+            28.0
+        ],
+        "moveSpeed": 0.4000000059604645,
+        "radius": 2.25
+    }
+}
